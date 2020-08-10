@@ -17,9 +17,9 @@ Genomics England access (GEL)
 Social
 ------------
 
-###Slack###
+### Slack ###
 
-###GitHub###
+### GitHub ###
 If you're reading this, you're already in, yay!
 
-###Important meetings###
+### Important meetings ###
