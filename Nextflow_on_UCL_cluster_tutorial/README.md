@@ -6,11 +6,9 @@ that you are familiar with basis of Nextflow, Singularity and job submitting in
 Sun Grid Environment (SGE). If not, please find below resources to familiarize 
 yourself:
 
-⋅⋅* [Nextflow documentation](https://www.nextflow.io/docs/latest/), [Nextflow examples](https://www.nextflow.io/example1.html)
-
-⋅⋅* [Singularity tutorial](https://singularity-tutorial.github.io/)
-
-⋅⋅* [UCL HPC guide](https://hpc.cs.ucl.ac.uk/full-guide/), [SGE job submission](http://www.softpanorama.org/HPC/Grid_engine/sge_submit_scripts.shtml)
+* [Nextflow documentation](https://www.nextflow.io/docs/latest/), [Nextflow examples](https://www.nextflow.io/example1.html)
+* [Singularity tutorial](https://singularity-tutorial.github.io/)
+* [UCL HPC guide](https://hpc.cs.ucl.ac.uk/full-guide/), [SGE job submission](http://www.softpanorama.org/HPC/Grid_engine/sge_submit_scripts.shtml)
 
 ### Step 1: configure your account to run nextflow
 Like with any other software, you need to load module with nextflow from the 
@@ -90,9 +88,9 @@ executor {
     pollInterval = '30sec'
 }
 ```
-⋅⋅* ```name``` states that SGE is run on server
-⋅⋅* ```queueSize``` limits amount of jobs which nextflow will submit. Default is 100.
-⋅⋅* ```pollInterval``` tells how often a poll occurs to check for a process termination.
+* ```name``` states that SGE is run on server
+* ```queueSize``` limits amount of jobs which nextflow will submit. Default is 100.
+* ```pollInterval``` tells how often a poll occurs to check for a process termination.
 
 Then the workflow will be executed every process will be submitted to the 
 cluster as a separate job. This is why we need to specify ```clusterOptions``` 
@@ -114,9 +112,9 @@ process {
 }
 ```
 
-⋅⋅* ```executor = 'sge'``` defines that every process will be run under SGE 
+* ```executor = 'sge'``` defines that every process will be run under SGE 
     executor defined above
-⋅⋅* ``` clusterOptions = '-S /bin/bash -cwd -l h_rt=24:00:00,h_vmem=1G,tmem=2G' ```
+* ``` clusterOptions = '-S /bin/bash -cwd -l h_rt=24:00:00,h_vmem=1G,tmem=2G' ```
     cluster options for processes without any label. Cluster options are 
     basically a linearized header of the classical job submission script. 
     ⋅⋅⋅⋅* Part ```-S /bin/bash``` is necessary and is followed by various options which 
@@ -128,7 +126,7 @@ process {
     [here](https://hpc.cs.ucl.ac.uk/full-guide/)
     ⋅⋅⋅⋅* please note that here we didn't specify amount of cores a process 
     will be run on, so it will be 1 as by default.
-⋅⋅* ```clusterOptions = '-S /bin/bash -cwd -l h_rt=24:00:00,h_vmem=32G,tmem=32G -pe smp 8'```
+* ```clusterOptions = '-S /bin/bash -cwd -l h_rt=24:00:00,h_vmem=32G,tmem=32G -pe smp 8'```
     This line defines resources available to a process requiring extra large 
     amounts of memory and time. Please note, that here ```-pe smp 8``` is added which
     gives to a process 8 cores to run on. Since the process will be computed on several cores,
@@ -212,11 +210,11 @@ To run nextflow type in terminal:
 nextflow run main.nf -profile ucl -entry prepare_reference_genome -bg 1>nf.out 2>nf.err 
 ```
 
-⋅⋅* ```-profile ucl``` tells nextflow to run it with UCL SGE profile configures in ```conf/ucl.conf```
-⋅⋅* ```-entry prepare_reference_genome``` specifies workflow to execute
-⋅⋅* ```-bg``` _puts nextflow run in background_ this options allows you to run long jobs
+* ```-profile ucl``` tells nextflow to run it with UCL SGE profile configures in ```conf/ucl.conf```
+* ```-entry prepare_reference_genome``` specifies workflow to execute
+* ```-bg``` _puts nextflow run in background_ this options allows you to run long jobs
 without constantly keeping terminal open.
-⋅⋅* ```1>nf.out 2>nf.err``` redirects messages and errors into nf.out and nf.err respectively.
+* ```1>nf.out 2>nf.err``` redirects messages and errors into nf.out and nf.err respectively.
 
 After you press enter after the command, nothing should happen, no message should appear. However,
 if you do 
