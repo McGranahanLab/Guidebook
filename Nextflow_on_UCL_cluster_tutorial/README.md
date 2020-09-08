@@ -7,7 +7,9 @@ Sun Grid Environment (SGE). If not, please find below resources to familiarize
 yourself:
 
 ⋅⋅* [Nextflow documentation](https://www.nextflow.io/docs/latest/), [Nextflow examples](https://www.nextflow.io/example1.html)
+
 ⋅⋅* [Singularity tutorial](https://singularity-tutorial.github.io/)
+
 ⋅⋅* [UCL HPC guide](https://hpc.cs.ucl.ac.uk/full-guide/), [SGE job submission](http://www.softpanorama.org/HPC/Grid_engine/sge_submit_scripts.shtml)
 
 ### Step 1: configure your account to run nextflow
