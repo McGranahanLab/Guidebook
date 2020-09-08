@@ -117,14 +117,14 @@ process {
 * ``` clusterOptions = '-S /bin/bash -cwd -l h_rt=24:00:00,h_vmem=1G,tmem=2G' ```
     cluster options for processes without any label. Cluster options are 
     basically a linearized header of the classical job submission script. 
-    ⋅⋅⋅⋅* Part ```-S /bin/bash``` is necessary and is followed by various options which 
+    * Part ```-S /bin/bash``` is necessary and is followed by various options which 
     are usually found in the header of job submitting script. 
-    ⋅⋅⋅⋅* In the example above ```-cwd``` tell that process will use the 
+    * In the example above ```-cwd``` tell that process will use the 
     directory, where the job has been submitted, as the working directory. 
-    ⋅⋅⋅⋅* ```-l h_rt=24:00:00,h_vmem=2G,tmem=2G``` determines wall time (24h), 
+    * ```-l h_rt=24:00:00,h_vmem=2G,tmem=2G``` determines wall time (24h), 
     virtual and physical memory limits. Full list of all directives is available 
     [here](https://hpc.cs.ucl.ac.uk/full-guide/)
-    ⋅⋅⋅⋅* please note that here we didn't specify amount of cores a process 
+    * please note that here we didn't specify amount of cores a process 
     will be run on, so it will be 1 as by default.
 * ```clusterOptions = '-S /bin/bash -cwd -l h_rt=24:00:00,h_vmem=32G,tmem=32G -pe smp 8'```
     This line defines resources available to a process requiring extra large 
