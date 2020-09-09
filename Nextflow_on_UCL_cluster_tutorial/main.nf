@@ -24,7 +24,8 @@ def helpMessage() {
         reference genome (hg19) with use of singularity container. The
         pipeline should be finished under 5 minutes. No input files required.
 
-        nextflow main.nf --inventory --fastqDir -entry
+        To run the pipeline, type in terminal:
+        nextflow run main.nf -profile ucl -entry prepare_reference_genome -bg 1>nf.out 2>nf.err 
         """
 }
 
