@@ -21,6 +21,7 @@ export PATH=/share/apps/jdk-10.0.1/bin/:${PATH}
 export JAVA_HOME=/share/apps/jdk-10.0.1/
 export PATH=/share/apps/colcc/nextflow/:${PATH}
 ```
+You need to log out and log in back in order for changes to take place.
 If you don't want to add these lines into your `~/.bashrc`, just simply run 
 them in terminal. However, once you logout and login again, nextflow won't be
 available anymore.
