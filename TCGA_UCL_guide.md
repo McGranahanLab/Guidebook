@@ -98,11 +98,14 @@ Some WXS cohorts such as WXS-SKCM have the data encrypted within the **data-enc/
 
 
 * Add the encryption program to your path
+		
 		source /share/apps/slade/source_files/gc.source 
 * From within the folder e.g. /SAN/colcc/TCGA/WXS-SKCM/ type:
+		
 		gocryptfs data-enc data
 * At this point you will be required to type the TCGA associated password and the **data/** folder should be mounted
 * To unmount the folder when no longer required type:
+		
 		fusermount -u /SAN/colcc/TCGA/WXS-SKCM/data
 
 ***NOTE 22nd September 2020***: At present the above way of accessing encrypted data does not work due to a permission issue with the file data-enc/gocryptfs.conf and the password needed not being known. These issues will hopefully be resolved soon. Additionally these encryptic cohorts at some point will be changed to the same format as the WXS-LUAD and WXS-LUSC cohorts so that these above steps will not be required.
