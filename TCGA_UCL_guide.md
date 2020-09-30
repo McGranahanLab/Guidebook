@@ -108,8 +108,11 @@ Some WXS cohorts such as WXS-SKCM have the data encrypted within the **data-enc/
 		
 		fusermount -u /SAN/colcc/TCGA/WXS-SKCM/data
 
+#### Current Issues
+
 ***NOTE 22nd September 2020***: At present the above way of accessing encrypted data does not work due to a permission issue with the file data-enc/gocryptfs.conf and the password needed not being known. These issues will hopefully be resolved soon. Additionally these encryptic cohorts at some point will be changed to the same format as the WXS-LUAD and WXS-LUSC cohorts so that these above steps will not be required.
 
+***NOTE 30th September 2020***: For the WXS-BRCA/ cohort there are currently no index bam.bai files, this has been reported and will hopefully be fixed. 
 
 ### RNAseq data
 
