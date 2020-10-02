@@ -22,9 +22,10 @@ Before accessing to the server, please read this: https://hpc.cs.ucl.ac.uk/quick
 
 To test your connection to the server, type in your terminal:
 
-`ssh <your user name>@storm.cs.ucl.ac.uk # use your CS account password
-
-ssh <your user name>@gamble.cs.ucl.ac.uk # use your CS account password`
+```
+ssh <your user name>@storm.cs.ucl.ac.uk # use your CS account password
+ssh <your user name>@gamble.cs.ucl.ac.uk # use your CS account password
+```
 
 Congrats! You’re on the cluster.
 
