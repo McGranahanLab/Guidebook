@@ -16,6 +16,7 @@ Sometimes you want numbered lists:
 1. Get your computer science (CS) account here: https://tsg.cs.ucl.ac.uk/apply-for-an-account/. Put Nicholas McGranahan as “Dept. of Computer Science Sponsor”. It will take a couple of days to get an answer. Also, you should have a cell phone so they could text you the password.
 2. After you have your computer science account, apply for a computer science cluster account: https://hpc.cs.ucl.ac.uk/account-form/. Do not fill in “Machine IP” or “Software requirements” fields
 3. In meantime, you can read carefully a user guide to the HPC here: https://hpc.cs.ucl.ac.uk/ (username: hpc, password: comic)
+
 4.Once you have your cluster account, you can apply for storage space for your project, if known and needed, here: https://hpc.cs.ucl.ac.uk/storage-form/
 
 Before accessing to the server, please read this: https://hpc.cs.ucl.ac.uk/quickstart/ and this https://hpc.cs.ucl.ac.uk/full-guide/. We usually use `gamble `for our computations.
