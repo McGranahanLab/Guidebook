@@ -11,14 +11,14 @@ Computational clusters
 ------------
 
 ### How to: get access to UCL cluster  ###
-Sometimes you want numbered lists:
 
+##### An algorith to apply for access to UCL HPC: #####
 1. Get your computer science (CS) account here: https://tsg.cs.ucl.ac.uk/apply-for-an-account/. Put Nicholas McGranahan as “Dept. of Computer Science Sponsor”. It will take a couple of days to get an answer. Also, you should have a cell phone so they could text you the password.
 2. After you have your computer science account, apply for a computer science cluster account: https://hpc.cs.ucl.ac.uk/account-form/. Do not fill in “Machine IP” or “Software requirements” fields
 3. In meantime, you can read carefully a user guide to the HPC here: https://hpc.cs.ucl.ac.uk/ (username: hpc, password: comic)
 4. Once you have your cluster account, you can apply for storage space for your project, if known and needed, here: https://hpc.cs.ucl.ac.uk/storage-form/
 
-Before accessing to the server, please read this: https://hpc.cs.ucl.ac.uk/quickstart/ and this https://hpc.cs.ucl.ac.uk/full-guide/. We usually use `gamble `for our computations.
+Before accessing to the server, please read this: https://hpc.cs.ucl.ac.uk/quickstart/ and this https://hpc.cs.ucl.ac.uk/full-guide/. We usually use `gamble` for our computations.
 
 To test your connection to the server, type in your terminal:
 
@@ -29,9 +29,70 @@ ssh <your user name>@gamble.cs.ucl.ac.uk # use your CS account password
 
 Congrats! You’re on the cluster.
 
+##### Establishing shorcuts to access the cluster (aka ssh jump) #####
+Code block above shows you a usual way to access cluster: though two ssh's. However, then you work a lot on cluster it might not be so convinient: it requires a lot of typing, passwords, and in addition you can't mount gamble to your computer to make acceess to files easy. Ssh jump can take care of this, and you'll be able to log in directly to gamble by just typing `ssh gamble`. You only need to complete the procedure below once.
+
+**Step 1** : add keys to storm to your computer
+
+1. Open your terminal
+2. Type `cd .ssh`. If you get an error that folder doesn't exist, do `mkdir .ssh` and then `cd .ssh`
+3. Type `ssh-keygen`. Enter storm as name and leave the password blank.
+4. Type `nano config`. The config file will be openned, insert in it:
+
+```
+Host storm 
+  User <your_user_name>
+  IdentityFile ~/.ssh/storm
+  HostName storm.cs.ucl.ac.uk
+  ForwardAgent yes
+Host gamble
+  User <your_user_name>
+  IdentityFile ~/.ssh/gamble
+  HostName gamble.cs.ucl.ac.uk
+  ProxyJump storm:22
+```
+
+Don't forget to replace <your_user_name> with your actual user name. Save the file and exit according to the commands displayed at the bottom of the screen
+5. Type `ssh-copy-id -i storm.pub storm`. This will copy the key you've just created to storm
+6.  Now you can just `ssh storm` without password to get to storm cluster.
+
+**Step 2** : add keys to gamble on storm
+
+1. Open your terminal
+2. Type `cd .ssh`. If you get an error that folder doesn't exist, do `mkdir .ssh` and then `cd .ssh`
+3. Type `ssh-keygen`. Enter gamble as name and leave the password blank.
+4. Type `nano config`. The config file will be openned, insert in it:
+
+```
+Host gamble 
+User <your_user_name>
+IdentityFile ~/.ssh/gamble
+HostName storm.cs.ucl.ac.uk
+
+```
+Don't forget to replace <your_user_name> with your actual user name. Save the file and exit according to the commands displayed at the bottom of the screen
+5. Type `ssh-copy-id -i gamble.pub gamble` . This will copy the key you've just created to gamble
+6. Type `exit` to exit storm and return back to your computer
+
+**Step 3**: add keys from gamble to your computer
+
+1. Open your terminal
+2. Type `ssh-keygen`. Enter gamble as name and leave the password blank.
+3. Type `ssh-copy-id -i gamble.pub gamble`. This will copy the key you've just created to gamble
+
+That’s it! Now you can just do `ssh gamble` and get on gamble!
+
+##### Mounting cluster on your computer (only if ssh jump is established) #####
+
+
+##### Main folders on the cluster #####
 Our main folder is accessible via : `cd /SAN/mcgranahanlab/general/`. Once you’re in, please create a folder for yourself: `mkdir your_name`. Please be aware that we should only store scripts in that folder, and no data. To store data, request storage space for your project, see point 4 above.
 
+**Please applydor the storage space for your project to store your data / results**
+
+##### Avaible software #####
 You can list all the available software here:  `ll /share/apps/`, and genomics-specific like this: `ll /share/apps/genomics/`
+
 
 Ed Martin (`e.martin@cs.ucl.ac.uk`) is our contact for the cluster questions, he’s very responsive. But please don’t abuse this link: first ask people in the lab.
 
