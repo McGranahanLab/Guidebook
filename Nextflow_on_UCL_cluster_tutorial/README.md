@@ -12,7 +12,7 @@ yourself:
 
 ### Step 1: configure your account to run nextflow
 
-:warning: In order to run Nextflow on the UCL cluster, a special node `askey` was created. Please use it and only it to run nextflow. :warning:
+:warning: If you're planning to use nextflow on the UCL cluster, you will need to login on a special node - `askey`.  It is accessible though gamble, i.e. you first need to `ssh gamble`, and then `ssh <your_user_name>@askey.cs.ucl.ac.uk` Please use it and only it to run nextflow. :warning:
 
 Like with any other software, you need to load module with nextflow from the 
 library. Yet, nextlow requires java be available at hand on server, so it's 
