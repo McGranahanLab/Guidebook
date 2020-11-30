@@ -82,6 +82,8 @@ Don't forget to replace <your_user_name> with your actual user name. Save the fi
 
 That’s it! Now you can just do `ssh gamble` and get on gamble!
 
+:warning: If you're planning to use nextflow on the UCL cluster, you will need to login on a special node - `askey`. Therefore you need to repeat the same set up, as for `gamble`, for the `askey` node. Just replace `gamble` with `askey` :warning:
+
 ### Mounting cluster on your computer (only if ssh jump is established) ###
 
 Mounting will allow you to open folders from gamble cluster as usual on your computer and copy to/from cluster files just by dragging and dropping them.
