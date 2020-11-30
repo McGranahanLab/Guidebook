@@ -11,6 +11,9 @@ yourself:
 * [UCL HPC guide](https://hpc.cs.ucl.ac.uk/full-guide/), [SGE job submission](http://www.softpanorama.org/HPC/Grid_engine/sge_submit_scripts.shtml)
 
 ### Step 1: configure your account to run nextflow
+
+:warning: In order to run Nextflow on the UCL cluster, a special node `askey` was created. Please use it and only it to run nextflow. :warning:
+
 Like with any other software, you need to load module with nextflow from the 
 library. Yet, nextlow requires java be available at hand on server, so it's 
 needed to be loaded too. I suggest to add following lines to `~/.bashrc` so 
