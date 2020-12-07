@@ -1,0 +1,8 @@
+!["Step 1"](https://github.com/McGranahanLab/Wiki/blob/master/Singularity_cloud_tutorial/img/1.png)
+!["Step 2"](https://github.com/McGranahanLab/Wiki/blob/master/Singularity_cloud_tutorial/img/2.png)
+!["Step 3"](https://github.com/McGranahanLab/Wiki/blob/master/Singularity_cloud_tutorial/img/3.png)
+!["Step 4"](https://github.com/McGranahanLab/Wiki/blob/master/Singularity_cloud_tutorial/img/4.png)
+!["Step 5"](https://github.com/McGranahanLab/Wiki/blob/master/Singularity_cloud_tutorial/img/5.png)
+!["Step 6"](https://github.com/McGranahanLab/Wiki/blob/master/Singularity_cloud_tutorial/img/6.png)
+!["Step 7"](https://github.com/McGranahanLab/Wiki/blob/master/Singularity_cloud_tutorial/img/7.png)
+!["Step 8"](https://github.com/McGranahanLab/Wiki/blob/master/Singularity_cloud_tutorial/img/8.png)
