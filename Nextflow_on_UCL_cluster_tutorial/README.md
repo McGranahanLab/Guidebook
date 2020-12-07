@@ -12,7 +12,16 @@ yourself:
 
 ### Step 1: configure your account to run nextflow
 
-:warning: If you're planning to use nextflow on the UCL cluster, you will need to login on a special node - `askey`.  It is accessible though gamble, i.e. you first need to `ssh gamble`, and then `ssh <your_user_name>@askey.cs.ucl.ac.uk` Please use it and only it to run nextflow. :warning:
+:warning: If you're planning to use nextflow on the UCL cluster, you will need to login on a special node - `askey`.  It is accessible though gamble, i.e. you first need to `ssh gamble`, and then `ssh <your_user_name>@askey.cs.ucl.ac.uk` (Try just ssh `ssh askey` if the previous command dosen't work). If you see something like: 
+```shell
+could not open any host key
+ssh_keysign: no reply
+sign using hostkey ecdsa-sha2-nistp521 SHA256:Vr+PP1cVtxUtq23TEhjvye0MmRGjhyKTWDpK0AKobbU failed
+Authentication failed.
+```
+ask cluster-support@cs.ucl.ac.uk for access.
+
+:warning:Please use the node only this node to run nextflow. :warning:
 
 Like with any other software, you need to load module with nextflow from the 
 library. Yet, nextlow requires java be available at hand on server, so it's 
