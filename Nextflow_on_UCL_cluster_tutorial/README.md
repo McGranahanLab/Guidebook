@@ -135,7 +135,9 @@ process {
     * In the example above ```-cwd``` tell that process will use the 
     directory, where the job has been submitted, as the working directory. 
     * ```-l h_rt=24:00:00,h_vmem=2G,tmem=2G``` determines wall time (24h), 
-    virtual and physical memory limits. Full list of all directives is available 
+    virtual and physical memory limits. Please note that here the memory is requested
+    _per cpu_, i.e. if you request 2G of memory and 8 cpus, it means that 16G of 
+    memory will be allocated. Full list of all directives is available 
     [here](https://hpc.cs.ucl.ac.uk/full-guide/)
     * please note that here we didn't specify amount of cores a process 
     will be run on, so it will be 1 as by default.
