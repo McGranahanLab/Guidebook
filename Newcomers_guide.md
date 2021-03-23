@@ -23,7 +23,7 @@ Before accessing to the server, please read this: https://hpc.cs.ucl.ac.uk/quick
 To test your connection to the server, type in your terminal:
 
 ```
-ssh <your user name>@storm.cs.ucl.ac.uk # use your CS account password
+ssh <your user name>@tails.cs.ucl.ac.uk # use your CS account password
 ssh <your user name>@gamble.cs.ucl.ac.uk # use your CS account password
 ```
 
@@ -32,35 +32,35 @@ Congrats! You’re on the cluster.
 ### Establishing shorcuts to access the cluster (aka ssh jump) ###
 Code block above shows you a usual way to access cluster: though two ssh's. However, then you work a lot on cluster it might not be so convinient: it requires a lot of typing, passwords, and in addition you can't mount gamble to your computer to make acceess to files easy. Ssh jump can take care of this, and you'll be able to log in directly to gamble by just typing `ssh gamble`. You only need to complete the procedure below once.
 
-**Step 1** : add keys to storm to your computer
+**Step 1** : add keys to tails to your computer
 
 1. Open your terminal
 2. Type `cd .ssh`. If you get an error that folder doesn't exist, do `mkdir .ssh` and then `cd .ssh`
-3. Type `ssh-keygen`. Enter storm as name and leave the password blank.
+3. Type `ssh-keygen`. Enter tails as name and leave the password blank.
 4. Type `nano config`. The config file will be openned, insert in it:
 
 ```
-Host storm 
+Host tails 
   User <your_user_name>
-  IdentityFile ~/.ssh/storm
-  HostName storm.cs.ucl.ac.uk
+  IdentityFile ~/.ssh/tails
+  HostName tails.cs.ucl.ac.uk
   ForwardAgent yes
 Host gamble
   User <your_user_name>
   IdentityFile ~/.ssh/gamble
   HostName gamble.cs.ucl.ac.uk
-  ProxyJump storm:22
+  ProxyJump tails:22
 ```
 
 Don't forget to replace <your_user_name> with your actual user name. Save the file and exit according to the commands displayed at the bottom of the screen
 
-5. Type `ssh-copy-id -i storm.pub storm`. This will copy the key you've just created to storm
-6.  Now you can just `ssh storm` without password to get to storm cluster.
+5. Type `ssh-copy-id -i tails.pub tails`. This will copy the key you've just created to tails
+6.  Now you can just `ssh tails` without password to get to tails cluster.
 
-**Step 2** : add keys to gamble on storm
+**Step 2** : add keys to gamble on tails
 
 1. Open your terminal
-2. Type `ssh storm`. Now you're on storm (UCL cluster).
+2. Type `ssh tails`. Now you're on tails (UCL cluster).
 3. Type `cd .ssh`. If you get an error that folder doesn't exist, do `mkdir .ssh` and then `cd .ssh`
 4. Type `ssh-keygen`. Enter gamble as name and leave the password blank.
 5. Type `nano config`. The config file will be openned, insert in it:
@@ -75,7 +75,7 @@ HostName gamble.cs.ucl.ac.uk
 Don't forget to replace <your_user_name> with your actual user name. Save the file and exit according to the commands displayed at the bottom of the screen
 
 6. Type `ssh-copy-id -i gamble.pub gamble` . This will copy the key you've just created to gamble
-7. Type `exit` to exit storm and return back to your computer.
+7. Type `exit` to exit tails and return back to your computer.
 
 **Step 3**: add keys from gamble to your computer
 
@@ -126,7 +126,7 @@ Ed Martin (`e.martin@cs.ucl.ac.uk`) is our contact for the cluster questions, he
 
 ## Genomics England access (GEL) ##
 
-Social
+Socialtails
 ------------
 
 ## Slack ##
