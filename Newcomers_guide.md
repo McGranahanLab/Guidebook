@@ -12,13 +12,13 @@ Computational clusters
 
 ## How to: get access to UCL cluster  ##
 
-### An algorith to apply for access to UCL HPC: ###
-1. Get your computer science (CS) account here: https://tsg.cs.ucl.ac.uk/apply-for-an-account/. Put Nicholas McGranahan as “Dept. of Computer Science Sponsor”. It will take a couple of days to get an answer. Also, you should have a cell phone so they could text you the password.
-2. After you have your computer science account, apply for a computer science cluster account: https://hpc.cs.ucl.ac.uk/account-form/. Do not fill in “Machine IP” or “Software requirements” fields
-3. In meantime, you can read carefully a user guide to the HPC here: https://hpc.cs.ucl.ac.uk/ (username: hpc, password: comic)
-4. Once you have your cluster account, you can apply for storage space for your project, if known and needed, here: https://hpc.cs.ucl.ac.uk/storage-form/
+### An algorith to apply for access to UCL HPC & get data storage space: ###
+1. Get your computer science (CS) account here: https://tsg.cs.ucl.ac.uk/apply-for-an-account/. Put Nicholas McGranahan as “Dept. of Computer Science Sponsor”. It will take a couple of days to get an answer. Also, you should have a cell phone number so they could text you the password.
+2. After you have your computer science account, apply for a computer science cluster account: https://hpc.cs.ucl.ac.uk/account-form/. Do not fill in “Machine IP” or “Software requirements” fields.
+3. In meantime, you can read carefully a user guide to the HPC here: https://hpc.cs.ucl.ac.uk/ (**username: hpc, password: comic**)
+4. Once you have your cluster account, you can **apply for storage space for your project**, if known and needed, here: https://hpc.cs.ucl.ac.uk/storage-form/. Usually project storage space comes in batches of 10Tb, so if you'd like more, it's wise to ask for several project spaces, each size of 10Tb. Once you get an email that your inquiry is satisfied, you will be able to find folder with your project at `/SAN/colcc/`. **Be sure to write down your project folder name**, because sometimes then you do `ls -l /SAN/colcc/` you won't be able to see all project folders.
 
-Before accessing to the server, please read this: https://hpc.cs.ucl.ac.uk/quickstart/ and this https://hpc.cs.ucl.ac.uk/full-guide/. We usually use `gamble` for our computations.
+Before accessing to the server, please read this: https://hpc.cs.ucl.ac.uk/quickstart/ and this https://hpc.cs.ucl.ac.uk/full-guide/. We usually use `gamble` for our computations. However, if `gamble` isn't available, try other servers.
 
 To test your connection to the server, type in your terminal:
 
@@ -112,14 +112,30 @@ This is manual for mounting on Mac, for other systems, check out: https://suppor
 
 
 ### Main folders on the cluster ###
-Our main folder is accessible via : `cd /SAN/mcgranahanlab/general/`. Once you’re in, please create a folder for yourself: `mkdir your_name`. Please be aware that we should only store scripts in that folder, and no data. To store data, request storage space for your project, see point 4 above.
+Our main folder is accessible via : `cd /SAN/mcgranahanlab/general/`. Once you’re in, please create a folder for yourself: `mkdir your_name`. Please be aware that _we should only store scripts in that folder, and no data_. To store data, request storage space for your project, see point 4 of section "An algorith to apply for access to UCL HPC & get data storage space".
 
 **Please apply for the storage space for your project to store your data / results**
 
 ### Avaible software ###
-You can list all the available software here:  `ll /share/apps/`, and genomics-specific like this: `ll /share/apps/genomics/`
+You can list all the available software here:  `ll /share/apps/`, and genomics-specific like this: `ll /share/apps/genomics/`. In order to use it, you need to export path to executable of the software. Code snippet below shows how to export path to samtools and bedtools.
 
+```
+export PATH=/share/apps/genomics/bedtools-2.25.0/bin/:${PATH};
+export PATH=/share/apps/genomics/samtools-1.9/bin/:${PATH}; 
+```
 
+To use software which comes in a shape of `jar` files, for example picard, do following:
+```
+PICARD_JAR=/share/apps/genomics/picard-2.20.3/bin/picard.jar
+java -jar $PICARD_JAR
+```
+
+**In case the software is not available on the cluster**, there are 2 options: 1) create singularity container with that software (reccomended) 2) send ticket to `cluster-support@cs.ucl.ac.uk`
+
+### Avaible resourses ###
+Unfortunately, we don't have shared folders with reference genomes, databases, etc.
+
+### Get help ###
 Ed Martin (`e.martin@cs.ucl.ac.uk`) is our contact for the cluster questions, he’s very responsive. But please don’t abuse this link: first ask people in the lab.
 
 ## Crick cluster access (CAMP) ##
