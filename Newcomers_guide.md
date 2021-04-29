@@ -10,7 +10,7 @@ UCL email address
 Computational clusters
 ------------
 
-## How to: get access to UCL cluster  ##
+## UCL cluster  ##
 
 ### An algorith to apply for access to UCL HPC & get data storage space: ###
 1. Get your computer science (CS) account here: https://tsg.cs.ucl.ac.uk/apply-for-an-account/. Put Nicholas McGranahan as “Dept. of Computer Science Sponsor”. It will take a couple of days to get an answer. Also, you should have a cell phone number so they could text you the password.
