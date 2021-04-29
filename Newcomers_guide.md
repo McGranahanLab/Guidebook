@@ -26,8 +26,10 @@ To test your connection to the server, type in your terminal:
 ssh <your user name>@tails.cs.ucl.ac.uk # use your CS account password
 ssh <your user name>@gamble.cs.ucl.ac.uk # use your CS account password
 ```
-
 Congrats! You’re on the cluster.
+
+Picture below illustrates why you need to use ssh twice:
+![UCL server structure](https://github.com/McGranahanLab/Wiki/blob/master/UCL_cluster_structure.png?raw=true)
 
 ### Establishing shorcuts to access the cluster (aka ssh jump) ###
 Code block above shows you a usual way to access cluster: though two ssh's. However, then you work a lot on cluster it might not be so convinient: it requires a lot of typing, passwords, and in addition you can't mount gamble to your computer to make acceess to files easy. Ssh jump can take care of this, and you'll be able to log in directly to gamble by just typing `ssh gamble`. You only need to complete the procedure below once.
@@ -134,6 +136,13 @@ java -jar $PICARD_JAR
 
 ### Avaible resourses ###
 Unfortunately, we don't have shared folders with reference genomes, databases, etc.
+
+### Interactive sessions ###
+It's handy to test code in intective session. During interactive session you get directly on computing node and test command execution as they would be in your job script. The code below requests an interactive session with 8Gb of RAM for 1h:
+```
+qrsh -l h_vmem=8G,tmem=8G,h_rt=1:0:0
+```
+It may take some time to get an interactive session, this time also depends on amout of currently running jobs. Then you get interactive session, beginning string of your bash terminal should change from `[your_user_name@gamble]$` to for example `[fry-611-43.local ]$`, where `fry-611-43.local` is a node name.
 
 ### Get help ###
 Ed Martin (`e.martin@cs.ucl.ac.uk`) is our contact for the cluster questions, he’s very responsive. But please don’t abuse this link: first ask people in the lab.
