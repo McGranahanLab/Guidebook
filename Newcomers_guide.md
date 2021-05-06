@@ -142,7 +142,7 @@ It's handy to test code in intective session. During interactive session you get
 ```
 qrsh -l h_vmem=8G,tmem=8G,h_rt=1:0:0
 ```
-It may take some time to get an interactive session, this time also depends on amout of currently running jobs. Then you get interactive session, beginning string of your bash terminal should change from `[your_user_name@gamble]$` to for example `[fry-611-43.local ]$`, where `fry-611-43.local` is a node name.
+It may take some time to get an interactive session, this time also depends on amout of currently running jobs and RAM you requested. Then you get interactive session, beginning string of your bash terminal should change from `[your_user_name@gamble]$` to for example `[your_user_name@moe-609-7 ]$`, where `moe-609-7` is a node name. In the beginning of your interactive session you will be at the root of the server and not in the directory you called `qrsh` from, so you'll  need to `cd /SAN/colcc/your_project_folder` to do your work.
 
 ### Get help ###
 Ed Martin (`e.martin@cs.ucl.ac.uk`) is our contact for the cluster questions, he’s very responsive. But please don’t abuse this link: first ask people in the lab.
