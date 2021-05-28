@@ -151,7 +151,28 @@ Ed Martin (`e.martin@cs.ucl.ac.uk`) is our contact for the cluster questions, he
 
 ## Genomics England access (GEL) ##
 
-Socialtails
+### An algorith to apply for access to GEL:
+
+* **Step 1**: Request access to Genomics England portal 
+Please follow ![this link](https://www.genomicsengland.co.uk/about-gecip/joining-research-community/) and press “Apply here”, on the ![next page](https://www.genomicsengland.co.uk/join-a-gecip-domain/) press “I would like to join a GeCIP Domain as a student or postdoc”.  Next you’ll need to fill up the form asking ordinary questions. In “GeCIP Domain Category of Interest” select Cancer,  and in “Requested Domain 1” put Lung cancer, in Supervisor details put Nicky’s contacts.
+
+* **Step 2: Set up your password**
+Shortly after (several days to a week) you will get an email with the title “Genomics England Research Portal Login Details” with your username and temporary password which you can reset. Account will take a couple of hours to be created after you reset your password.  After you have set your password and the account has been set up, you will be able to log in to the ***Research Portal***, but not yet in the ***Research Environment***. Research Portal is a place where you can track your application to join Genomics England, reset your password, apply to do a specific project on the data under Research registry (this is to reduce situations where multiple people are working on the same stuff. You can see the list of all projects ![here](https://research.genomicsengland.co.uk/research-registry/browse/), and change your personal data. However, you can’t work on data in the Research Portal (which basically makes it useless, but oh well…)! In order to work on data, you need to login to the ![Research environment](https://re.extge.co.uk/ovd/). You’ll be able to do that once your application is fully approved.  
+
+* **Step 3: Do information governance training.**
+Login to ![Research Portal](https://research.genomicsengland.co.uk/), and on the main page at right hand side find “Information Governance Training”. Pass this online course, it’s mandatory.
+
+* **Step 4: Login to Research Environment and explore**
+Once your account will be fully set up, you’ll be able to login into ![Research Portal](https://research.genomicsengland.co.uk/). You’re all set up! Ask one of the lab members (Bobby, Michelle, Kerstin, Maria) to give you a tour.
+
+**Useful links:**
+
+* Research Portal: https://research.genomicsengland.co.uk/,
+* Research Environment: https://re.extge.co.uk/ovd/
+* Research Environment user guide: https://research-help.genomicsengland.co.uk/display/GERE/Genomics+England+Research+Environment
+
+
+Socials
 ------------
 
 ## Slack ##
