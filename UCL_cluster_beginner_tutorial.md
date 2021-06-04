@@ -146,7 +146,7 @@ scp <your file> <your_user_name>@gamble:/SAN/colcc/<path_to_your_folder>
 scp -r <your folder> <your_user_name>@gamble:/SAN/colcc/<path_to_your_folder>
 ```
 
-### How to run java applications 
+## How to run java applications 
 There are couple of tricks to run java on UCL cluster. In general, java applications are coming in a shape of jar files. For example, picard jar: `/share/apps/genomics/picard-2.20.3/bin/picard.jar`. The command to launch jar file is:
 ```
 java -jar path_to_your_jar
