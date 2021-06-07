@@ -170,6 +170,7 @@ Once your account will be fully set up, you’ll be able to login into ![Researc
 * Research Portal: https://research.genomicsengland.co.uk/,
 * Research Environment: https://re.extge.co.uk/ovd/
 * Research Environment user guide: https://research-help.genomicsengland.co.uk/display/GERE/Genomics+England+Research+Environment
+* Airlock: https://airlock-staging.extge.co.uk/webclient/Login.xhtml
 
 
 Socials
