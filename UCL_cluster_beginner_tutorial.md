@@ -213,4 +213,5 @@ java -jar -Xms218M -Xmx218M $PICARD_PATH
 
 ## Jobs with lots of temporary files (scratch)
 ## Jobs with shared static resourses (i.e. reference genome)
++ using sif files on scratch
 ## Lots of very short jobs
