@@ -1,4 +1,16 @@
-This tutorial assumes that you can login into UCL cluster.
+# UCL cluster: a tutorial for beginners
+This tutorial assumes that you can login into UCL cluster. If not, please read [newcomers quide](https://github.com/McGranahanLab/Wiki/blob/master/Newcomers_guide.md) first.
+
+- [UCL cluster: a tutorial for beginners](#ucl-cluster--a-tutorial-for-beginners)
+  * [The job launching script](#the-job-launching-script)
+  * [Multicore programs and RAM for them](#multicore-programs-and-ram-for-them)
+  * [Getting files to and from UCL cluster](#getting-files-to-and-from-ucl-cluster)
+  * [How to run GATK and other java applications](#how-to-run-gatk-and-other-java-applications)
+  * [Jobs with lots of temporary files (scratch)](#jobs-with-lots-of-temporary-files--scratch-)
+  * [Jobs with shared static resourses (i.e. reference genome)](#jobs-with-shared-static-resourses--ie-reference-genome-)
+  * [Lots of very short jobs](#lots-of-very-short-jobs)
+  * [Free space in project directory](#free-space-in-project-directory)
+
 
 ## The job launching script
 To run your calculations on UCL cluster you will need to create a launching 
@@ -31,7 +43,7 @@ specify memory, running time, etc:
 * `#$ -l tmem=1G` and `#$ -l h_vmem=1G` specifies RAM which you would like to use, 1Gb in this case. Must be present at all times.
 * `-l h_rt=01:00:00` specifies time you'd like your job to be run for, 1h in this case. Since UCL cluster has no queuing systemm this parameter is extra important. Must be present at all times.
 * `-S /bin/bash` tells that this script is a bash script. Must be present at all times.
-* `-N test` gives our job a name. All the messages and errors the job will produce will be stored in file names job_name.o<some numbers>
+* `-N test` gives our job a name. All the messages and errors the job will produce will be stored in file names job_name.o**Some_Numbers**
 * `-cwd` Use current directory as start working directory for the job launcher.
 
 To submit job:
@@ -82,17 +94,17 @@ codes and their meaning is below:
 | Error         | allpending states with error                   | Eqw, Ehqw, EhRqw        |
 | Deleted       | all running and suspended states with deletion | dr,dt,dRr,dRt,ds, dS, dT,dRs, dRS, dRT | 
 
-After the job is completed, two files will be created: test.e<some numbers> and 
-test.o<some numbers>. The first one contains error messages and should be empty
+After the job is completed, two files will be created: test.e**Some_Numbers** and 
+test.o**Some_Numbers**. The first one contains error messages and should be empty
 and the second one contains just messages and should have our "Hello" + samtools
 help output.
 
-## Multicore programs & RAM for them
+## Multicore programs and RAM for them
 **IMPORTANT NOTE:** before you just request more cores for your job and launch
-it hoping that more cores will speed up the execution, *check that your code can be
-parallelized!*. For example, if you want to run `samtools flagstat` command, it
-has no option to specify number of threads/cores to use, therefore, it can only
-be run in single thread/core mode. This means that you can give it as many cores
+it hoping that more cores will speed up the execution, **check that your code can be
+parallelized!**. For example, if you want to run `samtools flagstat` command, it
+has no option to specify number of threads or cores to use, therefore, it can only
+be run in single thread or core mode. This means that you can give it as many cores
 as you'd like, it will still be using just 1.
 
 In order to run your script in multicore mode, you need to add `#$ -pe smp 8` to the header of your launching script.
@@ -110,7 +122,7 @@ The number after `smp` specifies number of core you'd like to use. For example:
 #$ -pe smp 8
 ```
 
-However, one should note that `tmem` and `h_vmem` specify amount of RAM _per core_, i.e. in the example above a total amount of requested RAM is 1G * 8cores = 8G. And in the example below:
+However, one should note that `tmem` and `h_vmem` specify amount of RAM _per core_, i.e. in the example above a total amount of requested RAM is 1G x 8cores = 8G. And in the example below:
 
 ```
 #!/bin/bash
@@ -123,13 +135,14 @@ However, one should note that `tmem` and `h_vmem` specify amount of RAM _per cor
 #$ -N test_multicore
 #$ -cwd
 ```
-there `-pe smp` option is not specified, and therefore considered just 1 core in use, amount of requested RAM is 1G * 1core = 1G
+there `-pe smp` option is not specified, and therefore considered just 1 core in use, amount of requested RAM is 1G x 1core = 1G
 
 ## Getting files to and from UCL cluster
 
 * If you use Windows - you're on your own =)
 * If you have mounted UCL cluster as described in the newcomers guide - just drag and drop in the corresponding window.
 * To copy from terminal:
+                           
 ```
 # to copy a single file from UCL cluster:
 scp <your_user_name>@gamble:/SAN/colcc/<path_to_your_file> . 
@@ -146,7 +159,7 @@ scp <your file> <your_user_name>@gamble:/SAN/colcc/<path_to_your_folder>
 scp -r <your folder> <your_user_name>@gamble:/SAN/colcc/<path_to_your_folder>
 ```
 
-## How to run java applications, i.e. GATK, Picard, etc
+## How to run GATK and other java applications
 There are couple of tricks to run java on UCL cluster. In general, java applications are coming in a shape of jar files. For example, picard jar: `/share/apps/genomics/picard-2.20.3/bin/picard.jar`. The command to launch jar file is:
 ```
 java -jar path_to_your_jar
@@ -213,5 +226,23 @@ java -jar -Xms218M -Xmx218M $PICARD_PATH
 
 ## Jobs with lots of temporary files (scratch)
 ## Jobs with shared static resourses (i.e. reference genome)
-+ using sif files on scratch
+ using sif files on scratch
 ## Lots of very short jobs
+
+## Free space in project directory
+Usually on Linux and Mac `du -h` command would give you amount of free space on your computer. 
+However, with UCL cluster it won't work unfortunately as it will give a wrong estimate. To assess 
+amount of free space in your project directory, run following in the terminal replacing YOUR_PROJECT_FOLDER_NAME
+with the real name of your project folder:
+```
+quota -s | grep -A1 "Filesystem\|YOUR_PROJECT_FOLDER_NAME"
+```
+It will return something similat to this:
+```
+     Filesystem   space   quota   limit   grace   files   quota   limit   grace
+128.41.96.4:/cluster/homes/colcc/aberner
+--
+128.41.96.8:/ucl/colcc/YOUR_PROJECT_FOLDER_NAME
+                 13423G      0K  20480G            437k       0   1000k 
+```
+which shows that the folder has total space of 20T(20480G) and currently 13T(13423G) is occupied.
