@@ -93,7 +93,13 @@ That’s it! Now you can just do `ssh gamble` and get on gamble!
 
 Mounting will allow you to open folders from gamble cluster as usual on your computer and copy to/from cluster files just by dragging and dropping them.
 
-1. Install sshfs: https://command-not-found.com/sshfs
+1. Install sshfs: https://command-not-found.com/sshfs. Help for Mac users:
+```
+brew uninstall osxfuse macfuse sshfs
+brew install --cask macfuse
+brew install gromgit/fuse/sshfs-mac
+brew link --overwrite sshfs-mac
+```
 2. Type in the terminal to create folder where home folder from gamble will be mounted `mkdir -p ~/gamble-home`
 3. Perform mounting of gamble home folder: 
 
