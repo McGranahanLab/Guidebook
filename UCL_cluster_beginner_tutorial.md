@@ -2,6 +2,10 @@
 This tutorial assumes that you can login into UCL cluster. If not, please read [newcomers quide](https://github.com/McGranahanLab/Wiki/blob/master/Newcomers_guide.md) first.
 
 - [UCL cluster: a tutorial for beginners](#ucl-cluster--a-tutorial-for-beginners)
+  * 
+  * [Main folders on the cluster](#main-folders-on-the-cluster)
+  * [Avaible software](#avaible-software)
+  * [Avaible resourses](#avaible-resourses)
   * [The job launching script](#the-job-launching-script)
   * [Multicore programs and RAM for them](#multicore-programs-and-ram-for-them)
   * [Getting files to and from UCL cluster](#getting-files-to-and-from-ucl-cluster)
@@ -10,7 +14,31 @@ This tutorial assumes that you can login into UCL cluster. If not, please read [
   * [Jobs with shared static resourses (i.e. reference genome)](#jobs-with-shared-static-resourses--ie-reference-genome-)
   * [Lots of very short jobs](#lots-of-very-short-jobs)
   * [Free space in project directory](#free-space-in-project-directory)
+  * [Interactive sessions](#interactive-sessions)
 
+## Main folders on the cluster ###
+Our main folder is accessible via : `cd /SAN/mcgranahanlab/general/`. Once you’re in, please create a folder for yourself: `mkdir your_name`. Please be aware that _we should only store scripts in that folder, and no data_. To store data, request storage space for your project, see point 4 of section "An algorith to apply for access to UCL HPC & get data storage space".
+
+**Please apply for the storage space for your project to store your data/results. Application process is described in the newcomers guide.**
+
+## Avaible software ##
+You can list all the available software here:  `ll /share/apps/`, and genomics-specific like this: `ll /share/apps/genomics/`. In order to use it, you need to export path to executable of the software. Code snippet below shows how to export path to samtools and bedtools.
+
+```
+export PATH=/share/apps/genomics/bedtools-2.25.0/bin/:${PATH};
+export PATH=/share/apps/genomics/samtools-1.9/bin/:${PATH}; 
+```
+
+To use software which comes in a shape of `jar` files, for example picard, do following:
+```
+PICARD_JAR=/share/apps/genomics/picard-2.20.3/bin/picard.jar
+java -jar $PICARD_JAR
+```
+
+**In case the software is not available on the cluster**, there are 2 options: 1) create singularity container with that software (reccomended) 2) send ticket to `cluster-support@cs.ucl.ac.uk`
+
+## Avaible resourses ##
+Unfortunately, we don't have shared folders with reference genomes, databases, etc.
 
 ## The job launching script
 To run your calculations on UCL cluster you will need to create a launching 
@@ -246,3 +274,10 @@ It will return something similat to this:
                  13423G      0K  20480G            437k       0   1000k 
 ```
 which shows that the folder has total space of 20T(20480G) and currently 13T(13423G) is occupied.
+
+## Interactive sessions ###
+It's handy to test code in intective session. During interactive session you get directly on computing node and test command execution as they would be in your job script. The code below requests an interactive session with 8Gb of RAM for 1h:
+```
+qrsh -l h_vmem=8G,tmem=8G,h_rt=1:0:0
+```
+It may take some time to get an interactive session, this time also depends on amout of currently running jobs and RAM you requested. Then you get interactive session, beginning string of your bash terminal should change from `[your_user_name@gamble]$` to for example `[your_user_name@moe-609-7 ]$`, where `moe-609-7` is a node name. In the beginning of your interactive session you will be at the root of the server and not in the directory you called `qrsh` from, so you'll  need to `cd /SAN/colcc/your_project_folder` to do your work.
