@@ -96,8 +96,24 @@ on your screen. `vagrant@vagrant` indicates that you're inside your VM. Now you 
 
 ### Step 4: finisning your work and cleaning up.
 
-VM does take quite a chunk of your computer resources to run, so let's stop it and free resources:
+VM does take quite a chunk of your computer resources to run, so let's stop it:
 ```
+exit
+```
+and free resources:
+```
+vagrant destroy
+```
+
+### Step 5: Routine use of VM:
+Once everything is installed and you tried logging in and out of your VM, routine use would be:
+```
+vagrant up
+vagrant ssh
+```
+... your work on containers, etc ...
+```
+exit
 vagrant destroy
 ```
 
