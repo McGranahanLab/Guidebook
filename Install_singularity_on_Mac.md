@@ -9,9 +9,9 @@ In order to install Vagrant on your Mac, you need Homebrew. If you already have 
 ```
 Next, Vagrant can be installed via Homebrew using the following commands (in terminal):
 ```
-brew cask install virtualbox
-brew cask install vagrant 
-brew cask install vagrant-manager
+brew install virtualbox
+brew install vagrant 
+brew install vagrant-manager
 ```
 
 ### Step 2: Set up Vagrant
