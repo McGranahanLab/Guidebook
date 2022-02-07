@@ -11,7 +11,7 @@ Next, Vagrant can be installed via Homebrew using the following commands (in ter
 ```
 brew cask install virtualbox
 brew cask install vagrant 
-brew cask install vagrant-manager`
+brew cask install vagrant-manager
 ```
 
 ### Step 2: Set up Vagrant
