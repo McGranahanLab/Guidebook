@@ -55,6 +55,7 @@ apt-get -qq -y install wget gcc libncurses5-dev zlib1g-dev libbz2-dev \
 
 ```
 %post
+    # Here we are located in the root of the system. Avaible folders are:
     export DEBIAN_FRONTEND=noninteractive
     TZ=Europe/Moscow
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -139,9 +140,6 @@ Important note: in container all environmental variables are accessible only **a
  %files
 /usr/bin/Desctop/my_test_file /olala
 ```
-
-
-
 #### %test
 #### %runscript
 
@@ -149,15 +147,61 @@ This list of sections is not all inclusive. For the full list, please check with
 Now, after we get to know the insides of the singularity recipe, we can create a simliet one. Let's do it on the example of samtools.
 
 #### Conda & python packages
-Note: where conda is located
+Due to the existance of `continuumio/miniconda3` header creating "pure python" containers is actually one of the easiest tasks. `continuumio/miniconda3` assures that both `python3`, `conda` and `pip` is already present in our container and we don't need to do anything to install them. Quite nice! In comparison to your usual installation of python packages, there is only one difference: `conda` and `pip` are not accesible in the root folder, because environmental variables were not set up. So in order to be able just type `conda` and `pip` as usual we need to set up environmental variables for them which in the recipe below is done with following lines: `export PATH=/opt/conda/bin/:$PATH` and `export PATH=/opt/conda/bin/:$PATH` (for pip).
+
+ALWAYS USE  -y. This says 'yes' to any installation request without a need for interaction
+ 
+Here is a simple example:
+```
+Bootstrap: docker
+From: continuumio/miniconda3
+
+%help
+    Main software:
+    numpy        v.1.0.0          https://github.com/KhiabanianLab/All-FIT
+    
+    Example run:
+    cat 'import numpy' > test.py
+    singularity exec numpy.sif python3 test.py
+
+%labels
+    CREATOR         Maria Litovchenko
+    ORGANIZATION    UCL
+    EMAIL           m.litovchenko[at]ucl.ac.uk
+    VERSION         v0.0.1
+
+%post
+    # STEP 1: update your OS. ALWAYS DO IT!
+    apt-get update && apt-get install
+    
+    # STEP 2: environmental variables for conda and pip
+    export PATH=/opt/conda/bin/:$PATH
+    
+    # STEP 3: install python version you need (this is optional, but improves reproducibility)
+    conda install python=3.8
+    
+    # STEP 4: install python packages with conda.
+    conda install --channel conda-forge --channel bioconda -y \
+                  numpy=1.21.5
+%environment
+    export PATH=/opt/conda/bin/:$PATH
+```
+Please note that for the enhanced reproducibility a certain version of numpy was requested. 
+If during installation a package asks you to create an environment, don't do it. Usually in python environments are created to isolate different, sometimes incompatible packages from each other. If you do need to use two envirnments = two containers.
+
 #### R packages
+
 #### Java
 #### Julia
 #### External files to download into package: dropbox, google drive 
+
+
 #### How to see recipe of already build container?
 #### How to use container from docker as a base and why not to do it.
+
 #### Sandbox container creation
 why I don't reccomend building based on other people's docker containers: they change! Especially something latest.
+
 #### Can I modify already created container? NO!
 #### Examples
 
@@ -166,6 +210,9 @@ singularity run-help my_container.sif
 Separate topics:
 #### Binding
 All files are usually located in '/'
+### Tips, tricks, advices.
+If you'd like to create a frankenstein singularity container which will contain some bash libraries, R libraries and python libraries, use `continuumio/miniconda3` header.
+
 
 ### Sources:
 https://sylabs.io/guides/3.5/user-guide/definition_files.html
