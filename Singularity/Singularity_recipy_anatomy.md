@@ -146,7 +146,7 @@ Important note: in container all environmental variables are accessible only **a
 This list of sections is not all inclusive. For the full list, please check with official documentation.
 Now, after we get to know the insides of the singularity recipe, we can create a simliet one. Let's do it on the example of samtools.
 
-#### Conda & python packages
+### Conda & python packages
 Due to the existance of `continuumio/miniconda3` header creating "pure python" containers is actually one of the easiest tasks. `continuumio/miniconda3` assures that both `python3`, `conda` and `pip` is already present in our container and we don't need to do anything to install them. Quite nice! In comparison to your usual installation of python packages, there is only one difference: `conda` and `pip` are not accesible in the root folder, because environmental variables were not set up. So in order to be able just type `conda` and `pip` as usual we need to set up environmental variables for them which in the recipe below is done with following lines: `export PATH=/opt/conda/bin/:$PATH` and `export PATH=/opt/conda/bin/:$PATH` (for pip).
 
 ALWAYS USE  -y. This says 'yes' to any installation request without a need for interaction
@@ -189,13 +189,89 @@ From: continuumio/miniconda3
 Please note that for the enhanced reproducibility a certain version of numpy was requested. 
 If during installation a package asks you to create an environment, don't do it. Usually in python environments are created to isolate different, sometimes incompatible packages from each other. If you do need to use two envirnments = two containers.
 
-#### R packages
+The example below is the reccomended way to create a container with python packages installed. However, if for some reason you'd like to use `ubuntu:20.04`  header instead of `continuumio/miniconda3`, here is how you can install conda:
+```
+Bootstrap:docker
+From:ubuntu:20.04
 
-#### Java
-#### Julia
+%help
+    A test container to show installation of conda on Ubuntu 20.04
+
+%post
+
+apt update -y
+        apt upgrade -y
+        apt install -y wget bzip2
+
+        # STEP 1: download miniconda v3.4 (check out https://repo.continuum.io/miniconda/ for other versions)
+        cd /opt
+        rm -fr miniconda
+        wget https://repo.continuum.io/miniconda/Miniconda3-4.7.12-Linux-x86_64.sh -O miniconda.sh
+
+        # STEP 2: install conda
+        bash miniconda.sh -b -p /opt/miniconda
+        export PATH="/opt/miniconda/bin:$PATH"
+        
+        # now conda is available and can be used, i.e.
+        conda install --channel conda-forge --channel bioconda -y \
+                  numpy=1.21.5
+```
+
+### R packages
+For creaation of containers with R packages installed there is also a trick with header `rstudio/r-base:4.0-focal` which simplifies the build because essentially R is already installed. In you want another version of R, scroll to section above. In comparison to installation on your computer, where you would probably use R studio or just open plain R terminal and type `install.packages` you'd need to add `Rscript -e` as in the example below. As many of us use biocondactor pakcages, I also added example for their installation.
+
+```
+Bootstrap: docker
+From: rstudio/r-base:4.0-focal
+
+%help
+    A test container showing how to install R packages
+
+%post 
+Rscript -e "install.packages(c('data.table'), quietly = TRUE)"
+        Rscript -e "install.packages(c('BiocManager','optparse', 'readr', \
+                                       'pheatmap', 'RColorBrewer'),
+                                     quietly = TRUE)"
+        Rscript -e "BiocManager::install(c('DESeq2', 'edgeR', 'tximport'), \
+                                         ask=FALSE, update=FALSE)"
+```
+
+In case you need to install R on ubuntu, here is how it's done:
+
+```
+Bootstrap: docker
+From: ubuntu:18.04
+
+%help
+        Main software:
+        R v4.0.0
+
+%labels
+      CREATOR           Carlos Martinez Ruiz
+            ORGANIZATION        UCL
+
+%post
+        export DEBIAN_FRONTEND=noninteractive
+        apt-get -qq -y update
+        apt-get -qq -y install wget gcc libncurses5-dev zlib1g-dev libbz2-dev gnupg2 \
+                               software-properties-common libcurl4-openssl-dev libssl-dev libxml2-dev
+        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+        add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/'
+        apt-get -qq -y dist-upgrade
+        apt-get -qq -y install r-base r-base-core r-recommended
+
+        # R is installed!
+
+```
+
+### Java
+### Julia
+### Compound containers: Ubuntu package + R packages + python packages
+If you'd like to create a frankenstein singularity container which will contain some bash libraries, R libraries and python libraries, use `continuumio/miniconda3` header.
+
+Cheat code: conda can have a lot of ubuntu packages!
+
 #### External files to download into package: dropbox, google drive 
-
-
 #### How to see recipe of already build container?
 #### How to use container from docker as a base and why not to do it.
 
@@ -211,7 +287,7 @@ Separate topics:
 #### Binding
 All files are usually located in '/'
 ### Tips, tricks, advices.
-If you'd like to create a frankenstein singularity container which will contain some bash libraries, R libraries and python libraries, use `continuumio/miniconda3` header.
+
 
 
 ### Sources:
