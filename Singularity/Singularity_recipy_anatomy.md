@@ -1,8 +1,8 @@
 # Anatomy of Singularity's recipy
 ## What is a recipy aka definition file?
 It is written in bash.
-## Main sections
-Example of the definition file (singularity recipy):
+## Recipy skeleton
+Example of the simpliest definition file (singularity recipy):
 ```
 Bootstrap: docker
 From: ubuntu:20.04
@@ -37,19 +37,84 @@ https://hub.docker.com/_/openjdk
 
 Note: my search showed that windows is not conteinarized. 
 
+### Sections (main content)
+In the example above (link) you may have noticed starting with % after the header. % is the key symbol to start section. Each section has its definitive purpose and here we'll consider basic ones essential for the container creation. 
 
-#### Table with headers (from) and what's already installed in them
+#### %post
+This is the most important section. In essence, the absolute minimal recipe would consist of header and post section. If you're familiar with Ubuntu, you may know that you need to use sudo to install something system wide. Here, in container, you can avoid it, you're a root by defition. Here our metaphor from the introduction with an empty Ubunntu machine (especially if you use `ubuntu:20.04` header) comes into play. So here in this section you write all the same commands you would write if you would install a desired software on your Ubuntu machine. 
+
+The lines below are my personal reccomendations:
+
+```
+apt-get -qq -y update
+# It is imperative to use -y with apt-get, so you don't have to interact with the container during it's creation
+apt-get -qq -y install wget gcc libncurses5-dev zlib1g-dev libbz2-dev \
+                               liblzma-dev make tabix
+```
+
+
+```
+%post
+    export DEBIAN_FRONTEND=noninteractive
+    TZ=Europe/Moscow
+    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+        
+    apt-get update
+    apt-get upgrade -y
+    apt-get install -y wget curl \ # to download
+                       unzip zip bzip2 tabix \ # to zip/unzip/compress files
+git \ # speaks for itself!
+gfortran perl \ # languages, fortran and perl. Python is already installed. R is separately
+gcc g++ make cmake build-essential \ # compilers
+software-properties-common \ # package manager
+autoconf \ # automatically configure software source
+ca-certificates \ # internet security
+
+zlib1g-dev libbz2-dev liblzma-dev libcurl4-gnutls-dev libssl-dev libncurses5-dev
+libcurl4-openssl-dev libxml2-dev libz-dev
+procps gnupg2 libffi-dev
+libatlas-base-dev
+libfontconfig1
+libsm6
+libtcl8.6
+libtk8.6
+libxrender1
+libxt6
+
+```
+For the 100% reproducibility, you'd need to specify versions of the libraries.
+
+If you need, you can of course download or create files and folders. 
+
+#### %labels
+#### %help
+#### %environment
+#### %files
+#### %test
+#### %labels
+#### %runscript
+
+This list of sections is not all inclusive. For the full list, please check with official documentation.
+Now, after we get to know the insides of the singularity recipe, we can create a simliet one. Let's do it on the example of samtools.
+
+
+### Hint for installation of basic Linux libraries.
+
 #### Conda & python packages
+Note: where conda is located
 #### R packages
 #### Java
 #### Julia
-#### External files to download intp package
+#### External files to download into package
 #### How to see recipe of already build container?
+#### How to use container from docker as a base and why not to do it.
+#### Sandbox container creation
+why I don't reccomend building based on other people's docker containers: they change! Especially something latest.
 #### Examples
 
-why I don't reccomend building based on other people's docker containers: they change! Especially something latest.
 Separate topics:
 #### Binding
+All files are usually located in '/'
 
 ### Sources:
 https://sylabs.io/guides/3.5/user-guide/definition_files.html
