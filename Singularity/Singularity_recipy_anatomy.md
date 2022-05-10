@@ -83,35 +83,78 @@ libxt6
 
 ```
 For the 100% reproducibility, you'd need to specify versions of the libraries.
+```
+apt-get install <package name>=<version>
+```
+
+This is the only (except header) essential section, everything else is embelishments and conviniences.  
 
 If you need, you can of course download or create files and folders. 
 
 #### %labels
+Labels section provides a meta data for the container. Conventionally, one puts there a general information about the container, such as who have created it, organization, email to contact, etc. It's a free form section, you can put here whatever you'd like. The general format is a name-value pair. 
+```
+%labels
+        CREATOR     Maria Litovchenko
+        ORGANIZATION    UCL       
+        EMAIL    m.litovchenko[at]ucl.ac.uk
+        VERSION v0.0.1
+```
+
 #### %help
+This section is a free text where usually an information which helps a user to interract with the container. It is displayed upon `singularity run-help` command. It is also nice to put here information about target and support software installed in this container.
+```
+%help
+        Main software:
+        All-FIT        v.1.0.0          https://github.com/KhiabanianLab/All-FIT
+
+        Example run:
+        singularity exec all-fit_v1.0.0.sif python /All-FIT.py --help
+```
+
 #### %environment
+`%environment` section serves to define environmental variables in your container. In case you're not familiar with the environmental variables here is a little example. It is very nice that you can just open your terminal, navigate to any folder, and then type `samtools` and it will work, isn't it? But how does your system knows where to look for samtools executable? Though environmental variable of course! Usually, on _actual computer_ they are defined in bashrc file. This file is one of the first files your computer reads during booting and therefore each time you switch your computer on it knows where samtools is. So, the common format for the environmental variable to define a path to binary executable is: `export PATH=/where/to/install/bin:$PATH`. Obviously, environmental variables may not only define path to a certain software (or file), they can also define a variable, i.e. `PI=3.14`.
+In container, they are defined in environment section. 
+
+```
+%environment
+    export PATH=/where/to/install/bin:$PATH
+    PI=3.14
+```
+
+Important note: in container all environmental variables are accessible only **after** container is created, but **not during its creation** (aka execution of %post section). So, if you need your samtools or PI during container creation as well, then you'll also have to define them in %post section. For example:
+
+```
+%post
+    export PATH=/where/to/install/bin:$PATH
+    PI=3.14
+%environment
+    export PATH=/where/to/install/bin:$PATH
+    PI=3.14
+```
+
 #### %files
 #### %test
-#### %labels
 #### %runscript
 
 This list of sections is not all inclusive. For the full list, please check with official documentation.
 Now, after we get to know the insides of the singularity recipe, we can create a simliet one. Let's do it on the example of samtools.
-
-
-### Hint for installation of basic Linux libraries.
 
 #### Conda & python packages
 Note: where conda is located
 #### R packages
 #### Java
 #### Julia
-#### External files to download into package
+#### External files to download into package: dropbox, google drive 
 #### How to see recipe of already build container?
 #### How to use container from docker as a base and why not to do it.
 #### Sandbox container creation
 why I don't reccomend building based on other people's docker containers: they change! Especially something latest.
+#### Can I modify already created container? NO!
 #### Examples
 
+### Usage
+singularity run-help my_container.sif
 Separate topics:
 #### Binding
 All files are usually located in '/'
