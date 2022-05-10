@@ -134,6 +134,14 @@ Important note: in container all environmental variables are accessible only **a
 ```
 
 #### %files
+**This section can only be used if you build container on your computer. Can not be used during online build.** %files section is used to copy files from the host computer (where you build a container) inside the container. The general convention is that each line is a source and destination pair. Source has to be a valid path on your system and destination is a path inside container. However, this section significantly reduces reproducibilty of your container creation.
+```
+ %files
+/usr/bin/Desctop/my_test_file /olala
+```
+
+
+
 #### %test
 #### %runscript
 
