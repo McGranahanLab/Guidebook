@@ -2,7 +2,7 @@
 ## What is a recipy aka definition file?
 It is written in bash.
 ## Recipy skeleton
-Example of the simpliest definition file (singularity recipy):
+Example of the simplest definition file (singularity recipe):
 ```
 Bootstrap: docker
 From: ubuntu:20.04
@@ -15,35 +15,43 @@ From: ubuntu:20.04
 
 ```
 
-In general, Singularity definition file can be divided into 2 main parts: **header** and **sections**. 
+In general, Singularity definition file can be divided into 2 main parts: 
+**header** and **sections**. 
 
 ### Header Section
-* **Header** part is usually composed out of 2 lines with which recipe starts. In the example above it is `Bootstrap: docker` and `From: ubuntu:20.04`. `Bootstrap` and `From` here are key words, like name of parameters, and `docker` and `ubuntu:20.04` are the values for those parameters. The recipe should always start from the `Bootstrap:` key word. Header of the recipe determines the operation system for the future container, which in turn controls what will already be pre-installed in the container without need for our intervention. In 99.9% of the cases line `Bootstrap: docker` will be the first line of your recipy. It says that the base OS (determined by `From:` line) will be pulled (downloaded) from Docker Hub. You can also put `Bootstrap: library`, and then the base OS will be pulled from Singularity Hub. In the majority of the cases, they are interchangeable. There are more various values you can give to `Bootstrap:`, you can read about them [](here). The `From: ` line is quite powerful. Ordinary `From: ubuntu:20.04` tells Singularity engine that you'd like to use "naked" Ubuntu v20.04 as a basis of your container, meaning that there will be nothing else installed. However, we can change value `ubuntu:20.04` to something else to allow some weight being lifted for us. For example, if this value will be `continuumio/miniconda3` it would mean that basis of our container will already have ubuntu + python 3 + conda installed and we won't need to worry about python installation. Table below lists some useful values for `From:`. Unfortunately, the full list of all possible values does not exist.
+* **Header** part is usually composed out of 2 lines with which recipe starts. 
+In the example above it is `Bootstrap: docker` and `From: ubuntu:20.04`. 
+`Bootstrap` and `From` here are key words, like name of parameters, and 
+`docker` and `ubuntu:20.04` are the values for those parameters. The recipe 
+should always start from the `Bootstrap:` key word. Header of the recipe 
+determines the operation system for the future container, which in turn 
+controls what will already be pre-installed in the container without need for 
+our intervention. In 99.9% of the cases line `Bootstrap: docker` will be the 
+first line of your recipy. It says that the base OS (determined by `From:` line) will be pulled (downloaded) from Docker Hub. You can also put `Bootstrap: library`, and then the base OS will be pulled from Singularity Hub. In the majority of the cases, they are interchangeable. There are more various values you can give to `Bootstrap:`, you can read about them [](here). The `From: ` line is quite powerful. Ordinary `From: ubuntu:20.04` tells Singularity engine that you'd like to use "naked" Ubuntu v20.04 as a basis of your container, meaning that there will be nothing else installed. However, we can change value `ubuntu:20.04` to something else to allow some weight being lifted for us. For example, if this value will be `continuumio/miniconda3` it would mean that basis of our container will already have ubuntu + python 3 + conda installed and we won't need to worry about python installation. Table below lists some useful values for `From:`. Unfortunately, the full list of all possible values does not exist.
 
 
-| Value of `From:`|  What is already inside |       Note           |
-| :-------------: |:-----------------------:| :-------------------:|
-| `ubuntu:14.04`  | 'naked' Ubuntu 14.04    | Unless you're 100% sure, it's better to use more up-to-date Ubuntu version |
-| `ubuntu:18.04`  | 'naked' Ubuntu 18.04    | Same as above        |
-| `ubuntu:20.04`  | 'naked' Ubuntu 20.04    | Used in 50% of times |
-| `continuumio/anaconda2`  |    |                |
-| `continuumio/miniconda2`  |    |                |
-| `continuumio/anaconda3`  |    |                |
-| `continuumio/miniconda3`  |    | Used in 49% of times|
-rstudio/r-base:4.0-focal
-https://hub.docker.com/r/rstudio/r-base
-ibmjava
-https://hub.docker.com/_/openjdk
+| Value of `From:`           |  What is already inside |       Note           |
+| :-------------------------:|:-----------------------:| :-------------------:|
+| `ubuntu:14.04`             | 'naked' Ubuntu 14.04    | Unless you're 100% sure, it's better to use more up-to-date Ubuntu version |
+| `ubuntu:18.04`             | 'naked' Ubuntu 18.04    | Same as above        |
+| `ubuntu:20.04`             | 'naked' Ubuntu 20.04    | Used in 50% of times |
+| `continuumio/anaconda2`    |    |                |
+| `continuumio/miniconda2`   |    |                |
+| `continuumio/anaconda3`    |    |                |
+| `continuumio/miniconda3`   |    | Used in 49% of times|
+| `rstudio/r-base:4.0-focal` | Ubuntu 20.04.4 + R v.4.0.5     | https://hub.docker.com/r/rstudio/r-base |
+| `ibmjava`                  | Ubuntu 18.04.6 + Java v8.0.7.6 | |
+| `julia:1.3`                | ||
 
-Note: my search showed that windows is not conteinarized. 
+Note: my search showed that windows is not containerized. 
 
 ### Sections (main content)
 In the example above (link) you may have noticed starting with % after the header. % is the key symbol to start section. Each section has its definitive purpose and here we'll consider basic ones essential for the container creation. 
 
 #### %post
-This is the most important section. In essence, the absolute minimal recipe would consist of header and post section. If you're familiar with Ubuntu, you may know that you need to use sudo to install something system wide. Here, in container, you can avoid it, you're a root by defition. Here our metaphor from the introduction with an empty Ubunntu machine (especially if you use `ubuntu:20.04` header) comes into play. So here in this section you write all the same commands you would write if you would install a desired software on your Ubuntu machine. 
+This is the most important section. In essence, the absolute minimal recipe would consist of header and post section. If you're familiar with Ubuntu, you may know that you need to use `sudo` to install something system wide. Here, in container, you can avoid it, you're a root by definition. Here our metaphor from the introduction with an empty Ubuntu machine (especially if you use `ubuntu:20.04` header) comes into play. So here in this section you write all the same commands you would write if you would install a desired software on your Ubuntu machine. 
 
-The lines below are my personal reccomendations:
+The lines below are my personal recommendations:
 
 ```
 apt-get -qq -y update
@@ -147,7 +155,7 @@ This list of sections is not all inclusive. For the full list, please check with
 Now, after we get to know the insides of the singularity recipe, we can create a simliet one. Let's do it on the example of samtools.
 
 ### Conda & python packages
-Due to the existance of `continuumio/miniconda3` header creating "pure python" containers is actually one of the easiest tasks. `continuumio/miniconda3` assures that both `python3`, `conda` and `pip` is already present in our container and we don't need to do anything to install them. Quite nice! In comparison to your usual installation of python packages, there is only one difference: `conda` and `pip` are not accesible in the root folder, because environmental variables were not set up. So in order to be able just type `conda` and `pip` as usual we need to set up environmental variables for them which in the recipe below is done with following lines: `export PATH=/opt/conda/bin/:$PATH` and `export PATH=/opt/conda/bin/:$PATH` (for pip).
+Due to the existence of `continuumio/miniconda3` header creating "pure python" containers is actually one of the easiest tasks. `continuumio/miniconda3` assures that both `python3`, `conda` and `pip` is already present in our container and we don't need to do anything to install them. Quite nice! In comparison to your usual installation of python packages, there is only one difference: `conda` and `pip` are not accesible in the root folder, because environmental variables were not set up. So in order to be able just type `conda` and `pip` as usual we need to set up environmental variables for them which in the recipe below is done with following lines: `export PATH=/opt/conda/bin/:$PATH` and `export PATH=/opt/conda/bin/:$PATH` (for pip).
 
 ALWAYS USE  -y. This says 'yes' to any installation request without a need for interaction
  
@@ -187,9 +195,13 @@ From: continuumio/miniconda3
     export PATH=/opt/conda/bin/:$PATH
 ```
 Please note that for the enhanced reproducibility a certain version of numpy was requested. 
-If during installation a package asks you to create an environment, don't do it. Usually in python environments are created to isolate different, sometimes incompatible packages from each other. If you do need to use two envirnments = two containers.
+If during installation a package asks you to create an environment, don't do it. Usually in python environments are created to isolate different, sometimes incompatible packages from each other. If you do need to use two environments = two containers.
 
-The example below is the reccomended way to create a container with python packages installed. However, if for some reason you'd like to use `ubuntu:20.04`  header instead of `continuumio/miniconda3`, here is how you can install conda:
+As you may notice, my personal recommendation line is not used in the container above. This is because we create a container 
+
+Is it possible to install ubuntu software, like samtools or bwa in container with `continuumio/miniconda3`? Yes! Because `continuumio/miniconda3` is _Ubuntu_ + conda.
+
+The example below is the recommended way to create a container with python packages installed. However, if for some reason you'd like to use `ubuntu:20.04`  header instead of `continuumio/miniconda3`, here is how you can install conda:
 ```
 Bootstrap:docker
 From:ubuntu:20.04
@@ -265,6 +277,7 @@ From: ubuntu:18.04
 ```
 
 ### Java
+
 ### Julia
 ### Compound containers: Ubuntu package + R packages + python packages
 If you'd like to create a frankenstein singularity container which will contain some bash libraries, R libraries and python libraries, use `continuumio/miniconda3` header.
