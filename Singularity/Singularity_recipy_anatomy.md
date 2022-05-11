@@ -16,8 +16,11 @@ Container is like a light, which has properties of both a wave and a particle: c
 - Like a **software**, a container harbors inside it a code which can be used to analyse data.
 - Like a **remote computer**, a container has inside it a whole operating system (OS), i.e. Ubuntu. As to a remote server, it is possible to log in *into it* and interact with the installed software *inside* it.
 
-## What is a recipy aka definition file?
-It is written in bash.
+Hopefully, by now all the advantages of software containerization with Singularity are well outlined and it is clear that containers are useful and indispensive part of future fully reproducible and easy to manage research. The question "how do I create a container and use it?" is open now. Let's dive into it!
+
+## What is a Singularity definition file aka recipy?
+To understand what is a Singularity Definition File (or recipy for short) an analogy of a container as a computer is very useful. Imagine you got a job as IT engineer and your company just bought 100 new shiny computers which you're tasked with configuring. You need to install exactly the same OS and software on all 100 computers and there is nothing on them to begin with. As a good IT engineer you will write a code containing a set of instructions which will install OS and all the software needed across the computers. This code is in essence a Singularity recipy. So, Singularity recipy is a text file (it is also piece of code) which describes the container: which exact OS is at its base, which, where and how various software were installed, where are any helpful files or data bases, etc. Since a recipy is just a text file, it can be put under version control like Git[LINK] allowing to track any changes. It can also be spread across the community a bit easier than a container file itself and the container created each time from this particular recipy will be exactly the same (if the recipy is written well, of course).
+
 ## Recipy skeleton
 Example of the simplest definition file (singularity recipe):
 ```
