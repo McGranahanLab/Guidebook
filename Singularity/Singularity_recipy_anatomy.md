@@ -1,7 +1,20 @@
 # Anatomy of Singularity's recipy
 
-why? If done right, containers are the road to ultimate reproducibility. 
-Container is like a light, it has properties of both file and software.
+## What is Singularity?
+Singularity[LINK!] is a program which packages (aka *containerization*) almost any software in a file and therefore makes it **portable** and **reproducible**. 
+- Portability means that a file with a software can be copied to *any* computer, server, workstation, HPC, *etc* and stay the same.
+- Reproducibility means that given a singularity container with a software, results of that software execution on *any* computer, server, workstation, HPC, will stay *exactly* the same. 
+
+## Why use Singularity (especially as bioinformatician)?
+1. **Reproducibility**. It's a common knowledge that sometimes results of a software execution are highly dependable on software versions (in the field of bioinformatics especially, but not exclusive). Despite that exact software versions may be noted in the methods, some users may have difficulties retrieving or installing it. Containers solve this issue effortlessly as a future user can just download a container, exactly the same one you performed your analysis with, and run it of their data. So, if done right, containers are the road to **ultimate reproducibility**.
+2. **No installation hustle**. With Singularity containers there is no struggles with software installation and version management. Containers are good to go a second after a download or creation. Need to test other software version? No problem! Just switch to another container, no need to worry about compatibility of various version on a computer/server/HPC. Containers also make you less dependent on cluster support team if you work on HPC as you won't need to bother them every time you project takes a need turn and you need to use yet another software.
+
+## What is a Singularity container?
+Container is like a light, which has properties of both a wave and a particle: container can be viewed as a file, a software and a whole remote computer. 
+
+- Like a **file**, a container can be moved from folder to folder, copied, deleted, downloaded, uploaded, encrypted, *etc*.
+- Like a **software**, a container harbors inside it a code which can be used to analyse data.
+- Like a **remote computer**, a container has inside it a whole operating system (OS), i.e. Ubuntu. As to a remote server, it is possible to log in *into it* and interact with the installed software *inside* it.
 
 ## What is a recipy aka definition file?
 It is written in bash.
