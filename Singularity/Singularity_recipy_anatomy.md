@@ -429,84 +429,189 @@ If you'd like to create a frankenstein Singularity container which will contain 
 Now, then we have Singularity definition file written, we can finally build our container. 
 
 ## Building container offline
-```
-singularity build samtools_in_a_box.sif samtools.def 
-```
+*It is implied that singularity is installed on your computer/server and you have root privileges. For MAC OS installation guide, check our this link, and for Ubuntu - this one. If you have a Windows machine, you can build you container in the cloud or install a virtual machine with Ubuntu and Singularity.*
 
-## Building container online on Singularity cloud
+Building container on computer is extremely easy! It's essentially a one-liner:
+```
+sudo singularity build name_of_the_container.sif definition_file_name.def 
+```
+In case of the container - example from above for `samtools`: 
+```
+sudo singularity build samtools_in_a_box.sif samtools.def 
+```
+Once the command is executed, a file `samtools_in_a_box.sif` will appear. It is a container fully ready to use!
+
+## Building container online on Singularity cloud.
+Singularity provides us with opportunity to build containers in the cloud, which takes away hustle of Singularity installation on personal computer. 
+
+1. Navigate to [https://cloud.sylabs.io/](https://cloud.sylabs.io/).
+![login page](img/cloud_build_1.png)
+2. Sign up and log in.
+3. You'll be directed to the dashboard. Click on **Remote Builder**.
+![dashboard](img/cloud_build_2.png)
+4. Copy and paste code from `samtools.def` to the black area.
+![remote builder](img/cloud_build_3.png)
+5. Fill in **Repository** field with *project_name/samtools_in_a_box*. project_name is the same value as in the Project field to the left. For your future containers other names instead of samtools_in_a_box can be used.
+![repository](img/cloud_build_4.png)
+6. Press "Submit Build" button.
+7. Wait till status changes to "Success".
+![success](img/cloud_build_5.png)
+8. Click on "View image"
+![view image](img/cloud_build_6.png)
+9. Congratulations! Container was successfully created. Now you can download it to your computer with "Download" button or pull it on HPC/computer via pull command which is revealed if you press "Pull Command" button.
+![pull](img/cloud_build_7.png)
 
 ## Using containers
-_This section implies that you have singularity installed on your computer / server. For MAC OS installation guide, check our this link, and for Ubuntu - this one. If you have a Windows machine, you're on your own._
+_This section implies that you have singularity installed on your computer/server. For MAC OS installation guide, check our this link, and for Ubuntu - this one. If you have a Windows machine, you're on your own._
 
+If the container was build in the cloud, pull it using corresponding command:
 ```
-singularity pull 
+singularity pull --arch amd64 library://marialitovchenko/marialitovchenko/samtools_in_a_box:latest
 ```
+If the container was build offline, you already have it!
 
-Once your container is created, you can interact with it in several modes. 
+Once your container is created/pulled/downloaded, you can interact with it in several modes. 
 1. **Checking integrity.** As described above a container is something like remote server in the shell of a sif file. If it's like server, we can log in _inside_ it and check installation of the software. To get inside the container, use _shell_ command to tell _singularity_ to let you in:
 ```
-singularity shell your_container.sif
+singularity shell samtools_in_a_box_latest.sif
 ```
 This will lead to a change in your terminal to:
 ```
-
+Singularity>
 ```
-Congratulations! We're inside the container! Command:
+Congratulations! You are inside the container! Command:
 ```
-ls -l
+ls -l /
 ```
 will display all the files and folders inside the container:
 ```
+total 4615
+lrwxrwxrwx   1 root    root          7 Apr 26 19:49 bin -> usr/bin
+drwxr-xr-x   2 root    root          3 Apr 15  2020 boot
+drwxr-xr-x  18 root    root       3800 May 11 16:51 dev
+lrwxrwxrwx   1 root    root         36 May 11 16:13 environment -> .singularity.d/env/90-environment.sh
+drwxr-xr-x  53 root    root       1819 May 11 16:14 etc
+drwxr-xr-x   1 vagrant vagrant      60 May 11 16:59 home
+lrwxrwxrwx   1 root    root          7 Apr 26 19:49 lib -> usr/lib
+lrwxrwxrwx   1 root    root          9 Apr 26 19:49 lib32 -> usr/lib32
+lrwxrwxrwx   1 root    root          9 Apr 26 19:49 lib64 -> usr/lib64
+lrwxrwxrwx   1 root    root         10 Apr 26 19:49 libx32 -> usr/libx32
+drwxr-xr-x   2 root    root          3 Apr 26 19:49 media
+drwxr-xr-x   2 root    root          3 Apr 26 19:49 mnt
+drwxr-xr-x   2 root    root          3 Apr 26 19:49 opt
+dr-xr-xr-x 102 root    root          0 May 11 16:52 proc
+drwx------   2 root    root         64 May 11 16:14 root
+drwxr-xr-x   8 root    root        136 May 11 16:13 run
+drwxrwxr-x   9 root    root       2371 May 11 16:15 samtools-1.10
+-rw-rw-r--   1 root    root    4721173 Dec  7 22:42 samtools-1.10.tar.bz2
+lrwxrwxrwx   1 root    root          8 Apr 26 19:49 sbin -> usr/sbin
+lrwxrwxrwx   1 root    root         24 May 11 16:13 singularity -> .singularity.d/runscript
+drwxr-xr-x   2 root    root          3 Apr 26 19:49 srv
+dr-xr-xr-x  13 root    root          0 May 11 16:51 sys
+drwxrwxr-x   2 root    root         36 May 11 16:15 tiny_scripts
+drwxrwxrwt   8 root    root       4096 May 11 16:59 tmp
+drwxr-xr-x  14 root    root        217 May 11 16:14 usr
+drwxr-xr-x  11 root    root        160 Apr 26 19:52 var
 ```
-You can even see the file test_file_inside_the_container which we created above!
-Now, you can check on software installation and in general behave in the same way as you would just in usual terminal.
+
+You can even see the folder `tiny_scripts` which we created in the recipe above!
+```
+ls -l /tiny_scripts/
+```
+
+Now, if just `ls -l` command is executed (without the slash!), you'll see files which are located in the same folder as your container (and even container itself):
+```
+total 238104
+drwxr-xr-x 3 root    root         4096 Nov 16 21:31 go
+-rw-rw-r-- 1 vagrant vagrant         0 May 11 17:04 samtools.def
+-rwxrwxr-x 1 vagrant vagrant 243810304 May 11 16:56 samtools_in_a_box_latest.sif
+```
+This shows that container has an access not only to the files which are located _inside_ it, but also to the ones located _outside_ it too.
+
+Now, you can check on software installation and in general interact with the terminal in the same way as you would just as in usual terminal. To check `samtools` installation, run:
+```
+samtools --help
+```
+Result should be:
+```
+Program: samtools (Tools for alignments in the SAM format)
+Version: 1.10 (using htslib 1.10)
+
+Usage:   samtools <command> [options]
+
+Commands:
+  -- Indexing
+     dict           create a sequence dictionary file
+     faidx          index/extract FASTA
+     fqidx          index/extract FASTQ
+     index          index alignment
+...
+```
+
+To log out of the container, type
+```
+exit
+```
+
 2. **Executing software from container.** Singularity makes it very easy to run the software from the container. Essentially, all the commands used in terminal to run the software will stay the same. The only change one needs to make is to put `singularity exec your_container.sif` in front of the command. For example, to execute `samtools` which is installed in our test container, the following command is used:
 ```
-singularity exec samtools_in_a_box.sif samtools --help
+singularity exec samtools_in_a_box_latest.sif samtools --help
 ```
 Following message should appear on your screen proving that `samtools` worked:
 ```
-```
-Basically, you can put any bash command after `singularity exec your_container.sif` and it will be executed inside the container. For example, to list files inside the container:
-```
-singularity exec samtools_in_a_box.sif ls -l
-```
-2a. **Executing software from container if it is not globally accesible** In the example above samtools is globaly accessible meaning that regardless of the folder _inside_ the container, if a `samtools` command is called, `samtools` will be executed. However, it can happen that a software you (or someone else) put inside the container was not made globally accesible. In such case, a full path to software _inside_ the container should be given after `samtools_in_a_box.sif `. During creation of `samtools_in_a_box.sif` a `say_cheese.sh` script was created in folder _tiny_scripts_. In order to execute it:
-```
-singularity exec samtools_in_a_box.sif /tiny_scripts/say_cheese.sh
-```
-Result
-```
-```
-The **slash** in front of the `tiny_scripts/say_cheese.sh` is **imperative** as it indicates the root.
+Program: samtools (Tools for alignments in the SAM format)
+Version: 1.10 (using htslib 1.10)
 
-2b. **Bining**. All commands above did not require files from your computer to serve as an input, which of course will not be the case then you'll use the container for data analysis. There is a small detail in the usage of singularity containers associated with location of your input files. Let's create a small sam file to serve as test one:
+Usage:   samtools <command> [options]
+
+Commands:
+  -- Indexing
+     dict           create a sequence dictionary file
+     faidx          index/extract FASTA
+     fqidx          index/extract FASTQ
+     index          index alignment
+...
 ```
-echo > small_test.sam
-echo >> small_test.sam
+Basically, you can put any bash command after `singularity exec samtools_in_a_box_latest.sif` and it will be executed inside the container. For example, to list files _inside_ the container:
 ```
-Now, let's use our container with samtools to convert that sam to bam format:
+singularity exec samtools_in_a_box_latest.sif ls -l /
 ```
-singularity exec samtools_in_a_box.sif samtools view -bS small_test.sam > small_test.bam
+2a. **Executing software from container if it is not globally accessible**. In the example above `samtools` is globally accessible meaning that regardless of the folder _inside_ the container, if a `samtools` command is called, `samtools` will be executed. However, it can happen that a software you (or someone else) put inside the container was not made globally accessible. In such case, a full path to software _inside_ the container should be given after `samtools_in_a_box_latest.sif `. During creation of `samtools_in_a_box_latest.sif` a `say_cheese.sh` script was created in folder _tiny_scripts_. In order to execute it:
 ```
-If you check now your computer with `ls -l`, you'll see that small_test.bam was created. Container worked! Hooray! However, it is unlikely that all of your imput files will be located in the same directory as a container. So let's move our small_test.sam to the directory just outside directory which contains our container:
+singularity exec samtools_in_a_box_latest.sif bash /tiny_scripts/say_cheese.sh
+```
+Result should be:
+```
+CHEESE!
+```
+The **slash** in front of the `tiny_scripts/say_cheese.sh` is **imperative** as it indicates the root directory and that file to be executed is _inside_ the container.
+
+2b. **Binding**. All commands above did not require files from your computer to serve as an input, which of course will not be the case then you'll use the container for data analysis. There is a small detail in the usage of singularity containers associated with location of your input files. Let's create a small sam file to serve as test one:
+```
+wget https://raw.githubusercontent.com/samtools/samtools/develop/examples/toy.sam
+```
+Now, let's use our container with `samtools` to convert that sam to bam format:
+```
+singularity exec samtools_in_a_box_latest.sif samtools view -bS toy.sam > small_test.bam
+```
+If you check now your computer with `ls -l`, you'll see that `small_test.bam` was created. Container worked! Hooray! However, it is unlikely that all of your input files will be located in the same directory as a container. So let's move our `toy.sam` to the directory just outside directory which contains our container:
 ```
 # create the directory
 mkdir ../sam_files_dir/
 # move
-mv small_test.sam ../sam_files_dir/
+mv toy.sam ../sam_files_dir/
 ```
 and let's try to execute the same command again:
 ```
-singularity exec samtools_in_a_box.sif samtools view -bS ../small_test.sam > small_test_1.bam
+singularity exec samtools_in_a_box_latest.sif samtools view -bS /sam_files_dir/toy.sam > small_test_1.bam
 ```
-Error occured:
+Error occurred:
 ```
+FATAL:   could not open image /home/vagrant/sam_files_dir/olala/samtools_in_a_box_latest.sif: failed to retrieve path for /home/vagrant/sam_files_dir/olala/samtools_in_a_box_latest.sif: lstat /home/vagrant/sam_files_dir/samtools_in_a_box_latest.sif: no such file or directory.
 ```
-
-The error message informs that file small_test.sam does not exist! Of course, in reality it does, just the container doesn't "see" it meaning that it can't detect it. This problem is solved with _binding_. Singularity allows you to map directories on your host system to directories within your container using _bind_ mounts. Binding is very similar with mounting directories of the remove server to your own computer. Binding is performed via `--bind` option given to singularity followed by a full path to the **folder** on your computer you'd linke to bind and full path to the folder in the container you'd like the original folder be bound to separated by ":". For example: `singularity --bind path_on_your_computer:path_to_be_used_inside_the_container`. The folder inside the container you'd like your folder on the computer to be bound to does not have to exist. In fact, I find it **the most convinient to use exactly the same full path to the folder on computer as the binding path inside the container**. This will ensure that all your code which uses absolute paths to the input files will runs smoothly. For example, the container with samtools we've created above is located in _containers_ folder, and small_test.sam is located in _sam_files_dir_. Both _containers_ folder and _sam_files_dir_ are subfolders of _singularity_showcase_ folder. Let's use it for binding. I  genral, it's a good idea to use as bind path a directory which is parent to both directory containing your container (sif file) and your input files.
+Despite that a full path to `/sam_files_dir/toy.sam` was given! The error message informs that file `small_test.sam` does not exist! Of course, in reality it does, just the container doesn't "see" it meaning that it can't detect it. This problem is solved with _binding_. Singularity allows you to map directories on your host system to directories within your container using _bind_ mounts. Binding is very similar with mounting directories of the remove server to your own computer. Binding is performed via `--bind` option given to singularity followed by a full path to the **folder** on your computer you'd link to bind and full path to the folder in the container you'd like the original folder be bound to separated by ":". For example: `singularity --bind path_on_your_computer:path_to_be_used_inside_the_container`. The folder inside the container you'd like your folder on the computer to be bound to does not have to exist. In fact, I find it **the most convenient to use exactly the same full path to the folder on computer as the binding path inside the container**. This will ensure that all your code which uses absolute paths to the input files will runs smoothly. For example, the container with samtools we've created above is located in _containers_ folder, and small_test.sam is located in _sam_files_dir_. Both _containers_ folder and _sam_files_dir_ are subfolders of _singularity_showcase_ folder. Let's use it for binding. I  general, it's a good idea to use as bind path a directory which is parent to both directory containing your container (sif file) and your input files.
 ``` 
-singularity —bind /singularity_showcase/:/singularity_showcase/ exec samtools_in_a_box.sif samtools view -bS /singularity_showcase/sam_files_dir/small_test.sam > small_test_1.bam
+singularity —bind /singularity_tutorial/software/:/singularity_tutorial/software/ exec samtools_in_a_box_latest.sif samtools view -bS /singularity_showcase/sam_files_dir/small_test.sam > small_test_1.bam
 ```
 Worked!
 
@@ -518,12 +623,3 @@ Library of recipies
 
 ## Sources:
 https://sylabs.io/guides/3.5/user-guide/definition_files.html
-
-## Java
-## Julia
-#### How to use container from docker as a base and why not to do it.
-
-#### Sandbox container creation
-why I don't reccomend building based on other people's docker containers: they change! Especially something latest.
-
-#### Can I modify already created container? YES! Should I? NO!
