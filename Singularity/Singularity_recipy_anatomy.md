@@ -26,7 +26,7 @@ To understand what is a Singularity Definition File (or recipe for short) an ana
 
 Since a recipe is just a text file, it can be put under version control like [Git](https://github.com/) allowing to track any changes. It can also be spread across the community a bit easier than a container file itself and the container created each time from this particular recipe will be exactly the same (if the recipe is written well, of course). By convention, recipe files have a `.def` extension, but you can use any extension you fancy, i.e. `txt`.
 
-## recipe skeleton
+## Recipe backbone
 Let's have a look at example of the simplest definition file:
 ```
 Bootstrap: docker
@@ -197,6 +197,8 @@ In practice, _all_ software do not have specific versions of dependencies noted 
   
 
 ```
+**ADVICE:** Always use `-y` option after `apt-get install`, it sets a 'yes' response to any computer request.
+
 3. Step 3 is an actual installation of software, `samtools` in the case of the example recipe. This step is completely software - specific. Usually a software does provide commands for its installation in the guide. Those commands just needed to be copied in `%post` section, omitting `sudo`. 
 ```
   # STEP 3 [SOFTWARE - SPECIFIC] installation commands for a specific software
@@ -217,65 +219,67 @@ In practice, _all_ software do not have specific versions of dependencies noted 
   echo 'echo CHEESE!' >> tiny_scripts/say_cheese.sh
 ```
 
-#### %labels
-Labels section provides a meta data for the container. Conventionally, one puts there a general information about the container, such as who have created it, organization, email to contact, etc. It's a free form section, you can put here whatever you'd like. The general format is a name-value pair. 
-```
-%labels
-        CREATOR     Maria Litovchenko
-        ORGANIZATION    UCL       
-        EMAIL    m.litovchenko[at]ucl.ac.uk
-        VERSION v0.0.1
-```
-
-#### %help
-This section is a free text where usually an information which helps a user to interract with the container. It is displayed upon `singularity run-help` command. It is also nice to put here information about target and support software installed in this container.
-```
-%help
-        Main software:
-        All-FIT        v.1.0.0          https://github.com/KhiabanianLab/All-FIT
-
-        Example run:
-        singularity exec all-fit_v1.0.0.sif python /All-FIT.py --help
-```
-
 #### %environment
-`%environment` section serves to define environmental variables in your container. In case you're not familiar with the environmental variables here is a little example. It is very nice that you can just open your terminal, navigate to any folder, and then type `samtools` and it will work, isn't it? But how does your system knows where to look for samtools executable? Though environmental variable of course! Usually, on _actual computer_ they are defined in bashrc file. This file is one of the first files your computer reads during booting and therefore each time you switch your computer on it knows where samtools is. So, the common format for the environmental variable to define a path to binary executable is: `export PATH=/where/to/install/bin:$PATH`. Obviously, environmental variables may not only define path to a certain software (or file), they can also define a variable, i.e. `PI=3.14`.
+> `%environment` section serves to define environmental variables in your container.
+
+In case you're not familiar with the environmental variables here is a little example. It is very nice that you can just open your terminal, navigate to any folder, and then type `samtools` and it will work, isn't it? But how does your system knows where to look for `samtools` executable? Though environmental variable of course! Usually, on _actual computer_ they are defined in `.bashrc` file. This file is one of the first files your computer reads during booting and therefore each time you switch your computer on it knows where `samtools` is. So, the common format for the environmental variable to define a path to binary executable is: `export PATH=/where/to/install/bin:$PATH`. Obviously, environmental variables may not only define path to a certain software (or file), they can also define a variable, i.e. `PI=3.14`.
 In container, they are defined in environment section. 
 
 ```
 %environment
-    export PATH=/where/to/install/bin:$PATH
-    PI=3.14
+  # example of environmental variable as path to samtools executable
+  export PATH=$PATH:/samtools-1.10/bin:$PATH
+  # example of environmental variable defining a global variable
+  PI=3.14
 ```
 
-Important note: in container all environmental variables are accessible only **after** container is created, but **not during its creation** (aka execution of %post section). So, if you need your samtools or PI during container creation as well, then you'll also have to define them in %post section. For example:
-
+**Important note:** in container all environmental variables are accessible only **after** container is created, but **not during its creation** (*not* during execution of `%post` section). So, if `samtools` or `PI` variable are needed during container creation, then they have to be defined `%post` section as well. For example:
 ```
 %post
     export PATH=/where/to/install/bin:$PATH
     PI=3.14
-%environment
-    export PATH=/where/to/install/bin:$PATH
-    PI=3.14
+```
+
+#### %labels
+> %labels section provides a meta data for the container. 
+
+Conventionally, one puts there a general information about the container, such as who have created it, organization, email to contact, `etc` to `%labels` section. It's a free form section, there is no restrictions. The general format is a name-value pair. 
+```
+%labels
+  CREATOR     Maria Litovchenko
+  ORGANIZATION    TEST_WORKING_PLACE       
+  EMAIL
+  VERSION v0.0.1
+```
+
+#### %help
+> %help section contains information which helps a user to interact with the container, i.e. how to run it.
+
+This section is also a  free text and usually provides information about main and support software installed in this container as well as gives example execution command.
+
+```
+%help
+  Main software:
+  samtools        v.1.10          http://www.htslib.org/
+  
+  Example run:
+  singularity exec samtools_in_a_box.sif samtools --help
 ```
 
 #### %files
-**This section can only be used if you build container on your computer. Can not be used during online build.** %files section is used to copy files from the host computer (where you build a container) inside the container. The general convention is that each line is a source and destination pair. Source has to be a valid path on your system and destination is a path inside container. However, this section significantly reduces reproducibilty of your container creation.
+> %files section is used to copy files from the host computer (where a container is build) inside the container. 
+
+**This section can only be used if you build container on your computer. Can not be used during online build on Singularity cloud**. The general convention is that each line of `%files` is a source and destination pair. Source has to be a valid path on host computer and destination is a path inside container. However, this section significantly reduces reproducibility of a container.
 ```
  %files
 /usr/bin/Desctop/my_test_file /olala
 ```
-#### %test
-#### %runscript
 
-This list of sections is not all inclusive. For the full list, please check with official documentation.
-Now, after we get to know the insides of the singularity recipe, we can create a simliet one. Let's do it on the example of samtools.
+This list of sections is not all inclusive. For the full list, please check with [official documentation](https://sylabs.io/guides/3.5/user-guide/definition_files.html#sections).
 
-### Conda & python packages
+## Containerization of python and conda packages
 Due to the existence of `continuumio/miniconda3` header creating "pure python" containers is actually one of the easiest tasks. `continuumio/miniconda3` assures that both `python3`, `conda` and `pip` is already present in our container and we don't need to do anything to install them. Quite nice! In comparison to your usual installation of python packages, there is only one difference: `conda` and `pip` are not accesible in the root folder, because environmental variables were not set up. So in order to be able just type `conda` and `pip` as usual we need to set up environmental variables for them which in the recipe below is done with following lines: `export PATH=/opt/conda/bin/:$PATH` and `export PATH=/opt/conda/bin/:$PATH` (for pip).
 
-ALWAYS USE  -y. This says 'yes' to any installation request without a need for interaction
- 
 Here is a simple example:
 ```
 Bootstrap: docker
