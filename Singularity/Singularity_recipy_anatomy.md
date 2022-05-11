@@ -1,7 +1,8 @@
 # Anatomy of Singularity's recipy
 
 ## What is Singularity?
-Singularity[LINK!] is a program which packages (aka *containerization*) almost any software in a file and therefore makes it **portable** and **reproducible**. 
+> [Singularity](https://sylabs.io/) is a program which packages (aka *containerization*) almost any software in a file and therefore makes it **portable** and **reproducible**. 
+
 - Portability means that a file with a software can be copied to *any* computer, server, workstation, HPC, *etc* and stay the same.
 - Reproducibility means that given a singularity container with a software, results of that software execution on *any* computer, server, workstation, HPC, will stay *exactly* the same. 
 
@@ -19,10 +20,14 @@ Container is like a light, which has properties of both a wave and a particle: c
 Hopefully, by now all the advantages of software containerization with Singularity are well outlined and it is clear that containers are useful and indispensive part of future fully reproducible and easy to manage research. The question "how do I create a container and use it?" is open now. Let's dive into it!
 
 ## What is a Singularity definition file aka recipy?
-To understand what is a Singularity Definition File (or recipy for short) an analogy of a container as a computer is very useful. Imagine you got a job as IT engineer and your company just bought 100 new shiny computers which you're tasked with configuring. You need to install exactly the same OS and software on all 100 computers and there is nothing on them to begin with. As a good IT engineer you will write a code containing a set of instructions which will install OS and all the software needed across the computers. This code is in essence a Singularity recipy. So, Singularity recipy is a text file (it is also piece of code) which describes the container: which exact OS is at its base, which, where and how various software were installed, where are any helpful files or data bases, etc. Since a recipy is just a text file, it can be put under version control like Git[LINK] allowing to track any changes. It can also be spread across the community a bit easier than a container file itself and the container created each time from this particular recipy will be exactly the same (if the recipy is written well, of course).
+To understand what is a Singularity Definition File (or recipy for short) an analogy of a container as a computer is very useful. Imagine you got a job as IT engineer and your company just bought 100 new shiny computers which you're tasked with configuring. You need to install exactly the same OS and software on all 100 computers and there is nothing on them to begin with. As a good IT engineer you will write a code containing a set of instructions which will install OS and all the software needed across the computers. This code is in essence a Singularity recipy. 
+
+> So, Singularity recipy is a text file (it is also piece of code) which describes the container: which exact OS is at its base, which, where and how various software were installed, where are any helpful files or data bases, etc. 
+
+Since a recipy is just a text file, it can be put under version control like [Git](https://github.com/) allowing to track any changes. It can also be spread across the community a bit easier than a container file itself and the container created each time from this particular recipy will be exactly the same (if the recipy is written well, of course). By convention, recipy files have a `.def` extension, but you can use any extension you fancy, i.e. `txt`.
 
 ## Recipy skeleton
-Example of the simplest definition file (singularity recipe):
+Let's have a look at example of the simplest definition file:
 ```
 Bootstrap: docker
 From: ubuntu:20.04
@@ -34,42 +39,65 @@ From: ubuntu:20.04
     python -c 'print("Hello World! Hello from our custom Singularity image!")'
 
 ```
+This recipy upon execution will produce a container which has naked Ubuntu v20.04 as OS and it will print `Hello World! Hello from our custom Singularity image!")` upon launch.
 
-In general, Singularity definition file can be divided into 2 main parts: 
-**header** and **sections**. 
+In general, Singularity definition file can be divided into 2 core parts: **header** and **sections**. 
 
 ### Header Section
-* **Header** part is usually composed out of 2 lines with which recipe starts. 
-In the example above it is `Bootstrap: docker` and `From: ubuntu:20.04`. 
-`Bootstrap` and `From` here are key words, like name of parameters, and 
-`docker` and `ubuntu:20.04` are the values for those parameters. The recipe 
-should always start from the `Bootstrap:` key word. Header of the recipe 
-determines the operation system for the future container, which in turn 
-controls what will already be pre-installed in the container without need for 
-our intervention. In 99.9% of the cases line `Bootstrap: docker` will be the 
-first line of your recipy. It says that the base OS (determined by `From:` line) will be pulled (downloaded) from Docker Hub. You can also put `Bootstrap: library`, and then the base OS will be pulled from Singularity Hub. In the majority of the cases, they are interchangeable. There are more various values you can give to `Bootstrap:`, you can read about them [](here). The `From: ` line is quite powerful. Ordinary `From: ubuntu:20.04` tells Singularity engine that you'd like to use "naked" Ubuntu v20.04 as a basis of your container, meaning that there will be nothing else installed. However, we can change value `ubuntu:20.04` to something else to allow some weight being lifted for us. For example, if this value will be `continuumio/miniconda3` it would mean that basis of our container will already have ubuntu + python 3 + conda installed and we won't need to worry about python installation. Table below lists some useful values for `From:`. Unfortunately, the full list of all possible values does not exist.
+* **Header** part is usually composed out of 2 lines with which recipe starts. In the example above it is 
+```
+Bootstrap: docker
+From: ubuntu:20.04
+```
+> Header determines the operating system for the future container, which in turn controls what will already be pre-installed in the container without need for our intervention.
+
+To continue the logic of example with IT engineer configuring 100 computers, header would represent the first thing an IT engineer does with the computer, which is OS installation.
+
+`Bootstrap` and `From` here are key words, like name of parameters, and `docker` and `ubuntu:20.04` are the values for those parameters. The recipe should always start from the `Bootstrap:` key word. In 99.9% of the cases line `Bootstrap: docker` will be the 
+first line of your recipy. It says that the base OS (determined by `From:` line) will be pulled (downloaded) from [Docker Hub](https://hub.docker.com/). You can also put `Bootstrap: library`, and then the base OS will be pulled from [Singularity Cloud](https://sylabs.io/). In the majority of the cases, they are interchangeable. There are more various values you can give to `Bootstrap:`, you can read about them [here](https://sylabs.io/guides/3.5/user-guide/definition_files.html#header).
+
+The `From: ` line is quite powerful. Ordinary `From: ubuntu:20.04` tells Singularity engine that you'd like to use "naked" Ubuntu v20.04 as a basis of your container, meaning that there will be nothing else, except Ubuntu v20.04 itself, installed. However, we can change value `ubuntu:20.04` to something else to allow some weight being lifted for us. For example, if this value will be `continuumio/miniconda3` it would mean that basis of our container will already have ubuntu + python 3 + conda installed and we won't need to worry about python or conda installation. Table below lists some useful values for `From:`. Unfortunately, the full list of all possible values does not exist.
 
 
-| Value of `From:`           |  What is already inside |       Note           |
-| :-------------------------:|:-----------------------:| :-------------------:|
-| `ubuntu:14.04`             | 'naked' Ubuntu 14.04    | Unless you're 100% sure, it's better to use more up-to-date Ubuntu version |
-| `ubuntu:18.04`             | 'naked' Ubuntu 18.04    | Same as above        |
-| `ubuntu:20.04`             | 'naked' Ubuntu 20.04    | Used in 50% of times |
-| `continuumio/anaconda2`    |    |                |
-| `continuumio/miniconda2`   |    |                |
-| `continuumio/anaconda3`    |    |                |
-| `continuumio/miniconda3`   |    | Used in 49% of times|
-| `rstudio/r-base:4.0-focal` | Ubuntu 20.04.4 + R v.4.0.5     | https://hub.docker.com/r/rstudio/r-base |
-| `ibmjava`                  | Ubuntu 18.04.6 + Java v8.0.7.6 | |
-| `julia:1.3`                | ||
+| Value of `From:`           |  What is already inside                              | Note |
+| :-------------------------:|:----------------------------------------------------:| :-------------------:|
+| `ubuntu:14.04`             | 'naked' Ubuntu 14.04 + Python 3.4.3 (no conda)       | Unless you're 100% sure, it's better to use more up-to-date Ubuntu version |
+| `ubuntu:18.04`             | 'naked' Ubuntu 18.04, no python                      | Same as above        |
+| `ubuntu:20.04`             | 'naked' Ubuntu 20.04, no python                      | **Used in 50% of times** |
+| `continuumio/anaconda2`    | Debian GNU/Linux 10 + Python v2.7.16 + conda v4.7.12 |       |
+| `continuumio/miniconda2`   | Debian GNU/Linux 10 + Python v2.7.16 + conda v4.7.12 | More lightweight in terms of GB version of anaconda2. Should be proffered to `continuumio/anaconda2` |
+| `continuumio/anaconda3`    | Debian GNU/Linux 11 + Python 3.9.7 + conda v4.11.0   |               |
+| `continuumio/miniconda3`   | Debian GNU/Linux 11 + Python 3.9.7 + conda v4.11.0   | **Used in 49% of times**. More lightweight in terms of GB version of anaconda3. Should be proffered to `continuumio/anaconda3` |
+| `rstudio/r-base:4.0-focal` | Ubuntu 20.04.4 + R v.4.0.5, no python                | [Check this link](https://hub.docker.com/r/rstudio/r-base) to see how specify your favorite R version |
+| `ibmjava`                  | Ubuntu 18.04.6 + Java v8.0.7.6, no python            |
+| `julia:1.3`                | Debian GNU/Linux 10 + Julia v.1.3.1, no python       |       |
 
-Note: my search showed that windows is not containerized. 
+> Header is the only essential part of the recipy. 
 
-### Sections (main content)
-In the example above (link) you may have noticed starting with % after the header. % is the key symbol to start section. Each section has its definitive purpose and here we'll consider basic ones essential for the container creation. 
+A definition file which consists just out of header is valid. However, then the container is created there will be not much inside as can be deduced from the table above. You can create a test container just with a header, play with it, explore and see which programs comes in package with operating system (spoiler: not much).
+
+### Sections
+In the [example above](LINK) you may have noticed lines starting with `%` followed by commands:
+```
+%post
+    apt-get -y update && apt-get install -y python
+
+%runscript
+    python -c 'print("Hello World! Hello from our custom Singularity image!")'
+```
+those are sections. 
+
+To continue the logic of example with IT engineer configuring 100 computers, sections would represent actual commands the engineer would use to download and install software, download and configure data base and so on.
+
+> Section(s) of a singularity recipy determines which/where/how software is installed, environmental variables, meta information, *etc*. To keep things neat, commands are divivded into sections with a specific purpose. As such, `%post` section tells which/where/how software is installed. `%environment` keeps track of environmental variables and `%labels` stores meta information (creator name and contact, *etc*) of the container. 
+
+Each section is defined by `%` followed by name and a code black. Section names are predefined: %post, %environment, %labels, %files, %help, %runscript, %startscript, %test, %setup, %app. In this tutorial only some sections will be considered.
+
+Example of a singularity recipy above is not representative. Therefore, here is 
+
 
 #### %post
-This is the most important section. In essence, the absolute minimal recipe would consist of header and post section. If you're familiar with Ubuntu, you may know that you need to use `sudo` to install something system wide. Here, in container, you can avoid it, you're a root by definition. Here our metaphor from the introduction with an empty Ubuntu machine (especially if you use `ubuntu:20.04` header) comes into play. So here in this section you write all the same commands you would write if you would install a desired software on your Ubuntu machine. 
+This is the most important section. In essence, the absolute minimal meaningful recipe would consist of header and post section. If you're familiar with Ubuntu, you may know that you need to use `sudo` to install something system wide. Here, in container, you can avoid it, you're a root by definition. Here our metaphor from the introduction with an empty Ubuntu machine (especially if you use `ubuntu:20.04` header) comes into play. So here in this section you write all the same commands you would write if you would install a desired software on your Ubuntu machine. 
 
 The lines below are my personal recommendations:
 
