@@ -1,4 +1,4 @@
-# Anatomy of Singularity's recipy
+# Anatomy of Singularity's recipe
 
 ## What is Singularity?
 > [Singularity](https://sylabs.io/) is a program which packages (aka *containerization*) almost any software in a file and therefore makes it **portable** and **reproducible**. 
@@ -19,14 +19,14 @@ Container is like a light, which has properties of both a wave and a particle: c
 
 Hopefully, by now all the advantages of software containerization with Singularity are well outlined and it is clear that containers are useful and indispensive part of future fully reproducible and easy to manage research. The question "how do I create a container and use it?" is open now. Let's dive into it!
 
-## What is a Singularity definition file aka recipy?
-To understand what is a Singularity Definition File (or recipy for short) an analogy of a container as a computer is very useful. Imagine you got a job as IT engineer and your company just bought 100 new shiny computers which you're tasked with configuring. You need to install exactly the same OS and software on all 100 computers and there is nothing on them to begin with. As a good IT engineer you will write a code containing a set of instructions which will install OS and all the software needed across the computers. This code is in essence a Singularity recipy. 
+## What is a Singularity definition file aka recipe?
+To understand what is a Singularity Definition File (or recipe for short) an analogy of a container as a computer is very useful. Imagine you got a job as IT engineer and your company just bought 100 new shiny computers which you're tasked with configuring. You need to install exactly the same OS and software on all 100 computers and there is nothing on them to begin with. As a good IT engineer you will write a code containing a set of instructions which will install OS and all the software needed across the computers. This code is in essence a Singularity recipe. 
 
-> So, Singularity recipy is a text file (it is also piece of code) which describes the container: which exact OS is at its base, which, where and how various software were installed, where are any helpful files or data bases, etc. 
+> So, Singularity recipe is a text file (it is also piece of code) which describes the container: which exact OS is at its base, which, where and how various software were installed, where are any helpful files or data bases, etc. 
 
-Since a recipy is just a text file, it can be put under version control like [Git](https://github.com/) allowing to track any changes. It can also be spread across the community a bit easier than a container file itself and the container created each time from this particular recipy will be exactly the same (if the recipy is written well, of course). By convention, recipy files have a `.def` extension, but you can use any extension you fancy, i.e. `txt`.
+Since a recipe is just a text file, it can be put under version control like [Git](https://github.com/) allowing to track any changes. It can also be spread across the community a bit easier than a container file itself and the container created each time from this particular recipe will be exactly the same (if the recipe is written well, of course). By convention, recipe files have a `.def` extension, but you can use any extension you fancy, i.e. `txt`.
 
-## Recipy skeleton
+## recipe skeleton
 Let's have a look at example of the simplest definition file:
 ```
 Bootstrap: docker
@@ -39,7 +39,7 @@ From: ubuntu:20.04
     python -c 'print("Hello World! Hello from our custom Singularity image!")'
 
 ```
-This recipy upon execution will produce a container which has naked Ubuntu v20.04 as OS and it will print `Hello World! Hello from our custom Singularity image!")` upon launch.
+This recipe upon execution will produce a container which has naked Ubuntu v20.04 as OS and it will print `Hello World! Hello from our custom Singularity image!")` upon launch.
 
 In general, Singularity definition file can be divided into 2 core parts: **header** and **sections**. 
 
@@ -54,7 +54,7 @@ From: ubuntu:20.04
 To continue the logic of example with IT engineer configuring 100 computers, header would represent the first thing an IT engineer does with the computer, which is OS installation.
 
 `Bootstrap` and `From` here are key words, like name of parameters, and `docker` and `ubuntu:20.04` are the values for those parameters. The recipe should always start from the `Bootstrap:` key word. In 99.9% of the cases line `Bootstrap: docker` will be the 
-first line of your recipy. It says that the base OS (determined by `From:` line) will be pulled (downloaded) from [Docker Hub](https://hub.docker.com/). You can also put `Bootstrap: library`, and then the base OS will be pulled from [Singularity Cloud](https://sylabs.io/). In the majority of the cases, they are interchangeable. There are more various values you can give to `Bootstrap:`, you can read about them [here](https://sylabs.io/guides/3.5/user-guide/definition_files.html#header).
+first line of your recipe. It says that the base OS (determined by `From:` line) will be pulled (downloaded) from [Docker Hub](https://hub.docker.com/). You can also put `Bootstrap: library`, and then the base OS will be pulled from [Singularity Cloud](https://sylabs.io/). In the majority of the cases, they are interchangeable. There are more various values you can give to `Bootstrap:`, you can read about them [here](https://sylabs.io/guides/3.5/user-guide/definition_files.html#header).
 
 The `From: ` line is quite powerful. Ordinary `From: ubuntu:20.04` tells Singularity engine that you'd like to use "naked" Ubuntu v20.04 as a basis of your container, meaning that there will be nothing else, except Ubuntu v20.04 itself, installed. However, we can change value `ubuntu:20.04` to something else to allow some weight being lifted for us. For example, if this value will be `continuumio/miniconda3` it would mean that basis of our container will already have ubuntu + python 3 + conda installed and we won't need to worry about python or conda installation. Table below lists some useful values for `From:`. Unfortunately, the full list of all possible values does not exist.
 
@@ -72,7 +72,7 @@ The `From: ` line is quite powerful. Ordinary `From: ubuntu:20.04` tells Singula
 | `ibmjava`                  | Ubuntu 18.04.6 + Java v8.0.7.6, no python            |
 | `julia:1.3`                | Debian GNU/Linux 10 + Julia v.1.3.1, no python       |       |
 
-> Header is the only essential part of the recipy. 
+> Header is the only essential part of the recipe. 
 
 A definition file which consists just out of header is valid. However, then the container is created there will be not much inside as can be deduced from the table above. You can create a test container just with a header, play with it, explore and see which programs comes in package with operating system (spoiler: not much).
 
@@ -89,64 +89,133 @@ those are sections.
 
 To continue the logic of example with IT engineer configuring 100 computers, sections would represent actual commands the engineer would use to download and install software, download and configure data base and so on.
 
-> Section(s) of a singularity recipy determines which/where/how software is installed, environmental variables, meta information, *etc*. To keep things neat, commands are divivded into sections with a specific purpose. As such, `%post` section tells which/where/how software is installed. `%environment` keeps track of environmental variables and `%labels` stores meta information (creator name and contact, *etc*) of the container. 
+> Section(s) of a singularity recipe determines which/where/how software is installed, environmental variables, meta information, *etc*. To keep things neat, commands are divivded into sections with a specific purpose. As such, `%post` section tells which/where/how software is installed. `%environment` keeps track of environmental variables and `%labels` stores meta information (creator name and contact, *etc*) of the container. 
 
-Each section is defined by `%` followed by name and a code black. Section names are predefined: %post, %environment, %labels, %files, %help, %runscript, %startscript, %test, %setup, %app. In this tutorial only some sections will be considered.
+Each section is defined by `%` followed by name and a code black. Section names are predefined: %post, %environment, %labels, %files, %help, %runscript, %startscript, %test, %setup, %app. In this tutorial only some sections will be considered. 
 
-Example of a singularity recipy above is not representative. Therefore, here is 
+> Order of sections in the recipe does not matter.
 
+Example of a singularity recipe above is not representative. Therefore, let's switch to the other one. The recipe below is a working Singularity definition file for a widely used bioinformatics software [samtools](http://www.htslib.org/).
+
+```
+Bootstrap: docker
+From: ubuntu:20.04
+
+%post
+  # STEP 1 [REQUIRED] make installation not require user interaction
+  export DEBIAN_FRONTEND=noninteractive
+  
+  # STEP 2 [OPTIONAL] install some basic ubuntu/linux libraries
+  apt-get install -y wget curl \ # to download from internet
+                     unzip zip bzip2 tabix \ # to zip/unzip/compress files
+                     git \ # speaks for itself!
+                     gfortran perl \ # languages, fortran and perl. Python and R are not installed here!
+                     gcc g++ make cmake build-essential \ # compilers
+                     software-properties-common \ # package manager
+                     autoconf \ # automatically configure software source
+  
+  # STEP 3 [SOFTWARE - SPECIFIC] installation commands for a specific software
+  apt-get install -qq -y libncurses5-dev zlib1g-dev libbz2-dev liblzma-dev
+  wget https://github.com/samtools/samtools/releases/download/1.10/samtools-1.10.tar.bz2
+  tar -xf samtools-1.10.tar.bz2
+  cd samtools-1.10
+  ./configure
+  make
+  make install
+  cd ../
+  
+  # STEP 4 [JUST AN EXAMPLE] creation of folder, file and bash script
+  mkdir tiny_scripts
+  echo '#!/bin/bash' > tiny_scripts/say_cheese.sh
+  echo 'echo CHEESE!' >> tiny_scripts/say_cheese.sh
+
+%environment
+  export PATH=$PATH:/samtools-1.10/bin:$PATH
+  PI=3.14
+
+%labels
+  CREATOR     Maria Litovchenko
+  ORGANIZATION    TEST_WORKING_PLACE       
+  EMAIL
+  VERSION v0.0.1    
+
+%help
+  Main software:
+  samtools        v.1.10          http://www.htslib.org/
+  
+  Example run:
+  singularity exec samtools_in_a_box.sif samtools --help
+
+```
 
 #### %post
-This is the most important section. In essence, the absolute minimal meaningful recipe would consist of header and post section. If you're familiar with Ubuntu, you may know that you need to use `sudo` to install something system wide. Here, in container, you can avoid it, you're a root by definition. Here our metaphor from the introduction with an empty Ubuntu machine (especially if you use `ubuntu:20.04` header) comes into play. So here in this section you write all the same commands you would write if you would install a desired software on your Ubuntu machine. 
+> `%post` section stores commands dedicated to software installation and file/database download and is the most important section. In essence, the absolute minimal meaningful recipe would consist of header and post section. 
 
-The lines below are my personal recommendations:
+`%post` section is written in `bash` and contains all the same commands used during software installation on a machine running Linux/Ubuntu. In plain Ubuntu `sudo` is often required to install a software system wide. In the `%post` section `sudo` is never used as while building a container root privileges are given by default. Let's have a closer look at the `%post` section in the example recipe:
+
+1. In my practice I found that numerous software require some user input during installation, i.e. "Please type y if you agree for installation". During container creation, there will not be an opportunity to give any input. Therefore, all requests from the computer must be disabled and a default response to them given. This is exactly what `export DEBIAN_FRONTEND=noninteractive` command does.
+```
+  # STEP 1 [REQUIRED] make installation not require user interaction
+  export DEBIAN_FRONTEND=noninteractive
+```
+2. In step 2 some basic Linux/Ubuntu packages are installed. The listed packages are my personal preferences and my not be required dependencies for software of your choice. Yet, I find that they are quite useful and are in the list of required dependencies for some software. Therefore this command with some modifications appeared in the majority of my singularity recipies. Table below describes each package function. 
+```
+  # STEP 2 [OPTIONAL] install some basic ubuntu/linux libraries
+  apt-get install -y wget curl \ # to download from internet
+                     unzip zip bzip2 tabix \ # to zip/unzip/compress files
+                     git \ # speaks for itself!
+                     gfortran perl \ # languages, fortran and perl. Python and R are not installed here!
+                     gcc g++ make cmake build-essential \ # compilers
+                     software-properties-common \ # package manager
+                     autoconf \ # automatically configure software source
+  
 
 ```
-apt-get -qq -y update
-# It is imperative to use -y with apt-get, so you don't have to interact with the container during it's creation
-apt-get -qq -y install wget gcc libncurses5-dev zlib1g-dev libbz2-dev \
-                               liblzma-dev make tabix
+| Package           |  Function                              |
+| :-------------------------|:----------------------------------------------------|
+| `wget` `curl`             | to download files from the internet |
+| `unzip zip bzip2 tabix`   | to zip/unzip/compress files |
+| `git`            | github |
+| `gfortran perl`            | languages, fortran and perl. Python and R are not installed here! |
+| `gcc g++ make cmake build-essential`            | compilers|
+| `software-properties-common`            | package manager |
+| `autoconf`           | automatically configure software source |
+
+
+> Ideally, during the installation process a **specific version**, i.e wget=1.20.3, of each package/software/program should be installed.
+
+In practice, _all_ software do not have specific versions of dependencies noted and therefore knowing in advance a package version could be difficult. There is a trick for such case: first, build a container without requiring specific versions, then write down versions of the installed in the container software and re-build the container with specific versions required. So, the fully reproducible version of step 2 would look like:
 ```
-
-
-```
-%post
-    # Here we are located in the root of the system. Avaible folders are:
-    export DEBIAN_FRONTEND=noninteractive
-    TZ=Europe/Moscow
-    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-        
-    apt-get update
-    apt-get upgrade -y
-    apt-get install -y wget curl \ # to download
-                       unzip zip bzip2 tabix \ # to zip/unzip/compress files
-git \ # speaks for itself!
-gfortran perl \ # languages, fortran and perl. Python is already installed. R is separately
-gcc g++ make cmake build-essential \ # compilers
-software-properties-common \ # package manager
-autoconf \ # automatically configure software source
-ca-certificates \ # internet security
-
-zlib1g-dev libbz2-dev liblzma-dev libcurl4-gnutls-dev libssl-dev libncurses5-dev
-libcurl4-openssl-dev libxml2-dev libz-dev
-procps gnupg2 libffi-dev
-libatlas-base-dev
-libfontconfig1
-libsm6
-libtcl8.6
-libtk8.6
-libxrender1
-libxt6
+  # STEP 2 [OPTIONAL] install some basic ubuntu/linux libraries
+  apt-get install -y wget curl \ # to download from internet
+                     unzip zip bzip2 tabix \ # to zip/unzip/compress files
+                     git \ # speaks for itself!
+                     gfortran perl \ # languages, fortran and perl. Python and R are not installed here!
+                     gcc g++ make cmake build-essential \ # compilers
+                     software-properties-common \ # package manager
+                     autoconf \ # automatically configure software source
+  
 
 ```
-For the 100% reproducibility, you'd need to specify versions of the libraries.
+3. Step 3 is an actual installation of software, `samtools` in the case of the example recipe. This step is completely software - specific. Usually a software does provide commands for its installation in the guide. Those commands just needed to be copied in `%post` section, omitting `sudo`. 
 ```
-apt-get install <package name>=<version>
+  # STEP 3 [SOFTWARE - SPECIFIC] installation commands for a specific software
+  apt-get install -qq -y libncurses5-dev zlib1g-dev libbz2-dev liblzma-dev
+  wget https://github.com/samtools/samtools/releases/download/1.10/samtools-1.10.tar.bz2
+  tar -xf samtools-1.10.tar.bz2
+  cd samtools-1.10
+  ./configure
+  make
+  make install
+  cd ../
 ```
-
-This is the only (except header) essential section, everything else is embelishments and conviniences.  
-
-If you need, you can of course download or create files and folders. 
+4. Step 4 is not a necessary step for `samtools` installation and functioning. It is just an example that one can create directories (`tiny_scripts`) and files (`say_cheese.sh`, it's even a script!) inside the container. 
+```
+  # STEP 4 [JUST AN EXAMPLE] creation of folder, file and bash script
+  mkdir tiny_scripts
+  echo '#!/bin/bash' > tiny_scripts/say_cheese.sh
+  echo 'echo CHEESE!' >> tiny_scripts/say_cheese.sh
+```
 
 #### %labels
 Labels section provides a meta data for the container. Conventionally, one puts there a general information about the container, such as who have created it, organization, email to contact, etc. It's a free form section, you can put here whatever you'd like. The general format is a name-value pair. 
