@@ -156,7 +156,7 @@ From: ubuntu:20.04
   # STEP 1 [REQUIRED] make installation not require user interaction
   export DEBIAN_FRONTEND=noninteractive
 ```
-2. In step 2 some basic Linux/Ubuntu packages are installed. The listed packages are my personal preferences and my not be required dependencies for software of your choice. Yet, I find that they are quite useful and are in the list of required dependencies for some software. Therefore this command with some modifications appeared in the majority of my singularity recipies. Table below describes each package function. 
+2. In step 2 some basic Linux/Ubuntu packages are installed. The listed packages are my personal preferences and may not be required dependencies for software of your choice. Yet, I find that they are quite useful and are in the list of required dependencies for some software. Therefore this command with some modifications appeared in the majority of my singularity recipes. Table below describes each package function. 
 ```
   # STEP 2 [OPTIONAL] install some basic ubuntu/linux libraries
   apt-get install -y wget curl unzip zip bzip2 tabix git \
@@ -186,8 +186,6 @@ In practice, _all_ software do not have specific versions of dependencies noted 
                      gcc g++ make cmake build-essential \ # compilers
                      software-properties-common \ # package manager
                      autoconf \ # automatically configure software source
-  
-
 ```
 **ADVICE:** Always use `-y` option after `apt-get install`, it sets a 'yes' response to any computer request.
 
@@ -212,7 +210,7 @@ In practice, _all_ software do not have specific versions of dependencies noted 
 ```
 
 #### %environment
-> `%environment` section serves to define environmental variables in your container.
+> `%environment` section defines environmental variables in your container.
 
 In case you're not familiar with the environmental variables here is a little example. It is very nice that you can just open your terminal, navigate to any folder, and then type `samtools` and it will work, isn't it? But how does your system knows where to look for `samtools` executable? Though environmental variable of course! Usually, on _actual computer_ they are defined in `.bashrc` file. This file is one of the first files your computer reads during booting and therefore each time you switch your computer on it knows where `samtools` is. So, the common format for the environmental variable to define a path to binary executable is: `export PATH=/where/to/install/bin:$PATH`. Obviously, environmental variables may not only define path to a certain software (or file), they can also define a variable, i.e. `PI=3.14`.
 In container, they are defined in environment section. 
@@ -442,24 +440,7 @@ sudo singularity build samtools_in_a_box.sif samtools.def
 Once the command is executed, a file `samtools_in_a_box.sif` will appear. It is a container fully ready to use!
 
 ## Building container online on Singularity cloud.
-Singularity provides us with opportunity to build containers in the cloud, which takes away hustle of Singularity installation on personal computer. 
-
-1. Navigate to [https://cloud.sylabs.io/](https://cloud.sylabs.io/).
-![login page](img/cloud_build_1.png)
-2. Sign up and log in.
-3. You'll be directed to the dashboard. Click on **Remote Builder**.
-![dashboard](img/cloud_build_2.png)
-4. Copy and paste code from `samtools.def` to the black area.
-![remote builder](img/cloud_build_3.png)
-5. Fill in **Repository** field with *project_name/samtools_in_a_box*. project_name is the same value as in the Project field to the left. For your future containers other names instead of samtools_in_a_box can be used.
-![repository](img/cloud_build_4.png)
-6. Press "Submit Build" button.
-7. Wait till status changes to "Success".
-![success](img/cloud_build_5.png)
-8. Click on "View image"
-![view image](img/cloud_build_6.png)
-9. Congratulations! Container was successfully created. Now you can download it to your computer with "Download" button or pull it on HPC/computer via pull command which is revealed if you press "Pull Command" button.
-![pull](img/cloud_build_7.png)
+Singularity provides us with opportunity to build containers in the cloud, which takes away hustle of Singularity installation on personal computer. [Please follow this tutorial to build your container in the cloud]().
 
 ## Using containers
 _This section implies that you have singularity installed on your computer/server. For MAC OS installation guide, check our this link, and for Ubuntu - this one. If you have a Windows machine, you're on your own._
