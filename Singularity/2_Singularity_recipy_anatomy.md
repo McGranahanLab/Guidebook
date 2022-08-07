@@ -597,6 +597,15 @@ singularity —bind /singularity_tutorial/software/:/singularity_tutorial/softwa
 Worked!
 
 ## Tips, tricks 
+### Put a custom file/data into container
+* Get your file
+* Put the file into your dropbox
+* Get a link from your file from dropbox (‘copy link’), it will have a format something like this: ```https://www.dropbox.com/s/vzhwjgbbmdnq135/12864_2020_6583_MOESM2_ESM.csv?dl=0```
+* delete ‘?dl=0’ from the end of the link
+* insert following code into your script: 
+```wget https://www.dropbox.com/s/vzhwjgbbmdnq135/12864_2020_6583_MOESM2_ESM.csv```
+
+
 How to see recipe of already build container?
 singularity run-help my_container.sif
 External files to download into package: dropbox, google drive 
