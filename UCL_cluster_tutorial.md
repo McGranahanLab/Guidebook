@@ -136,7 +136,7 @@ Ed Martin (`e.martin@cs.ucl.ac.uk`) is our contact for the cluster questions, he
 
 No VSCode on login node allowed! To use VSCode, you should grab an interactive node (max walltime = 3 days) as per the [CAMP docs](https://cegiwiki.crick.ac.uk/index.php/Running_jobs_on_CAMP).
 
-3. From your terminal: `sbatch --part=cpu --time=3-00:00:00 <(echo -e '#!/bin/bash\nsleep 3d')`
+3. From your terminal: `sbatch --part=ncpu --time=3-00:00:00 <(echo -e '#!/bin/bash\nsleep 3d')`
 
 4. You can check the node assigned with `squeue -u <username>` under NODELIST
 
