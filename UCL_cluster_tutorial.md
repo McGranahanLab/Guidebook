@@ -129,6 +129,39 @@ Ed Martin (`e.martin@cs.ucl.ac.uk`) is our contact for the cluster questions, he
 
 ## Crick cluster access (CAMP) ##
 
+1. Install GlobalProtect VPN (instructions on [crick intranet](https://intranet.crick.ac.uk/our-crick/it-support/pages/vpn-virtual-private-network#how-to-install-the-globalprotect-software))
+2. Get in touch with HPC to set up an ssh keypair
+
+### Using VSCode on nemo
+
+No VSCode on login node allowed! To use VSCode, you should grab an interactive node (max walltime = 3 days) as per the [CAMP docs](https://cegiwiki.crick.ac.uk/index.php/Running_jobs_on_CAMP).
+
+3. From your terminal: `sbatch --part=ncpu --time=3-00:00:00 <(echo -e '#!/bin/bash\nsleep 3d')`
+
+4. You can check the node assigned with `squeue -u <username>` under NODELIST
+
+ex.
+
+
+![image](https://github.com/McGranahanLab/Guidebook/assets/23587234/4df2f3d8-db5e-4873-b28c-e4350b0cd041)
+
+
+5. Then, use remote ssh extension within VSCode and jump directly to your ineractive job. Your ssh config might look something like this: 
+
+```
+Host nemo_login
+  HostName login.nemo.thecrick.org
+  User harrigc
+  ForwardAgent yes
+  IdentityFile ~/.shh/id_rsa
+
+Host nemo
+  HostName ca124
+  User harrigc
+  ForwardAgent yes
+  ProxyCommand ssh -W %h:%p nemo_login 
+```
+
 ## Genomics England access (GEL) ##
 
 Socialtails
